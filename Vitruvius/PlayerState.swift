@@ -25,11 +25,15 @@ class PlayerState: IDamagable {
         self.hp = 20
         self.maxHp = 20
         self.currentMana = Cost.free()
-        self.manaPerTurn = Cost.free()
+        self.manaPerTurn = Cost.init(colorless: 0, charm: 0, guile: 0, might: 2, faith: 2, sharp: 0)
         self.currentBlock = 0
         self.hand = Hand(cards: [])
         self.drawPile = DrawPile(cards: withCards)
         self.discard = DiscardPile()
+    }
+    
+    func addManaForTurn() {
+        self.currentMana = Cost.add(a: self.currentMana, b: self.manaPerTurn)
     }
     
     func drawCardsIntoHand() -> Void {
@@ -63,6 +67,10 @@ class PlayerState: IDamagable {
         
     }
     
+    func canPlay(card: Card) -> Bool {
+        return self.currentMana.canSubtract(cost: card.cost)
+    }
+    
     func startTurn() -> Void {
         // Get some mana at the start of your turn...
         self.currentMana = Cost.add(a: self.currentMana, b: self.manaPerTurn)
@@ -71,8 +79,8 @@ class PlayerState: IDamagable {
     var description: String {
         get {
             let lines = [
-                "HP: \(self.hp), \(self.maxHp)",
-                "Block: \(self.currentBlock)",
+                "HP: (\(self.currentBlock)) \(self.hp), \(self.maxHp)",
+                "Mana: \(self.currentMana.toString())",
                 "Hand: \(self.hand.cards.map({ $0.name }).joined(separator: ", "))"
             ]
             return lines.joined(separator: "\n")

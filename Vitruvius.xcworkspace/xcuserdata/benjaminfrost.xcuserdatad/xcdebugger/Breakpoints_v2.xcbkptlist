@@ -3,4 +3,70 @@
    uuid = "033290F2-99C7-4046-93E6-2F11D00F3A0F"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F61952F-DF32-4B74-9237-891A1DA8E19B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Vitruvius/Card.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "chooseAction(state:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4F61952F-DF32-4B74-9237-891A1DA8E19B - 5f4b183a39e7eb8"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Vitruvius.DummyPlayer.chooseAction(state: Vitruvius.BattleState) -&gt; PromiseKit.Promise&lt;Vitruvius.PlayerAction&gt;"
+                  moduleName = "Vitruvius"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/benjaminfrost/Documents/Projects/Vitruvius/Vitruvius/Card.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "206"
+                  endingLineNumber = "206"
+                  offsetFromSymbolStart = "51">
+               </Location>
+               <Location
+                  uuid = "4F61952F-DF32-4B74-9237-891A1DA8E19B - 64c0d2c7dba37acd"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Vitruvius.Card) -&gt; Swift.Bool in Vitruvius.DummyPlayer.chooseAction(state: Vitruvius.BattleState) -&gt; PromiseKit.Promise&lt;Vitruvius.PlayerAction&gt;"
+                  moduleName = "Vitruvius"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/benjaminfrost/Documents/Projects/Vitruvius/Vitruvius/Card.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "207"
+                  endingLineNumber = "207"
+                  offsetFromSymbolStart = "34">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F14E124F-D9C4-4B35-B111-F0E3AE5DF51F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Vitruvius/Card.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "chooseAction(state:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

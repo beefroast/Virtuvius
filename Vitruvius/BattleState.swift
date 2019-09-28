@@ -31,6 +31,7 @@ class BattleState {
         self.player = player
         self.playerState = playerState
         self.enemies = enemies
+        
     }
     
     func outcome() -> BattleOutcome {
@@ -67,6 +68,7 @@ class BattleState {
                 // Player discards their hand
                 self.playerState.discardHand()
                 self.playerState.drawCardsIntoHand()
+                self.playerState.addManaForTurn()
                 
                 let enemyPromises = self.enemies.map({ $0.takeTurn(state: self) })
                 return when(fulfilled: enemyPromises)

@@ -58,6 +58,72 @@ struct Cost {
     func negative() -> Cost {
         return Cost(colorless: -colorless, charm: -charm, guile: -guile, might: -might, faith: -faith, sharp: -sharp)
     }
+    
+    func convertedManacost() -> Int {
+        return self.colorless + self.charm + self.guile + self.might + self.faith + self.sharp
+    }
+    
+    static func from(string: String) -> Cost {
+        string.map { (c) -> Cost in
+            switch c {
+            case "1": return Cost(colorless: 1, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "2": return Cost(colorless: 2, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "3": return Cost(colorless: 3, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "4": return Cost(colorless: 4, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "5": return Cost(colorless: 5, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "6": return Cost(colorless: 6, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "7": return Cost(colorless: 7, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "8": return Cost(colorless: 8, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "9": return Cost(colorless: 9, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "C": return Cost(colorless: 0, charm: 1, guile: 0, might: 0, faith: 0, sharp: 0)
+            case "G": return Cost(colorless: 0, charm: 0, guile: 1, might: 0, faith: 0, sharp: 0)
+            case "M": return Cost(colorless: 0, charm: 0, guile: 0, might: 1, faith: 0, sharp: 0)
+            case "F": return Cost(colorless: 0, charm: 0, guile: 0, might: 0, faith: 1, sharp: 0)
+            case "S": return Cost(colorless: 0, charm: 0, guile: 0, might: 0, faith: 0, sharp: 1)
+            default: return Cost.free()
+            }
+        }.reduce(Cost.free()) { (x, y) -> Cost in
+            return Cost.add(a: x, b: y)
+        }
+    }
+    
+    func toString() -> String {
+        let x = self.colorless > 0 ? "\(self.colorless)" : ""
+        let c = self.charm > 0 ? (0...self.charm-1).map({ _ in "C" }).joined() : ""
+        let g = self.guile > 0 ? (0...self.guile-1).map({ _ in "G" }).joined() : ""
+        let m = self.might > 0 ? (0...self.might-1).map({ _ in "M" }).joined() : ""
+        let f = self.faith > 0 ? (0...self.faith-1).map({ _ in "F" }).joined() : ""
+        let s = self.sharp > 0 ? (0...self.sharp-1).map({ _ in "S" }).joined() : ""
+        let result = "\(x)\(c)\(g)\(m)\(f)\(s)"
+        if result.count == 0 {
+            return "0"
+        } else {
+            return result
+        }
+        
+    }
+    
+    func canSubtract(cost: Cost) -> Bool {
+     
+        let dC = self.charm - cost.charm
+        let dG = self.guile - cost.guile
+        let dM = self.might - cost.might
+        let dF = self.faith - cost.faith
+        let dS = self.sharp - cost.sharp
+        
+        guard dC >= 0 && dG >= 0 && dM >= 0 && dF >= 0 && dS >= 0 else {
+            return false
+        }
+        
+        let totalRemainingMana = dC + dG + dM + dF + dS
+        
+        if totalRemainingMana >= cost.colorless {
+            return true
+        } else {
+            return false
+        }
+    }
+    
 }
 
 protocol IDamagable {
@@ -88,6 +154,10 @@ class Card {
     }
     
     func play(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+        
+        // Pay for the card
+        state.playerState.currentMana = Cost.add(a: state.playerState.currentMana, b: self.cost.negative())
+        
         return Promise<Void>()
     }
 }
@@ -96,7 +166,9 @@ class Card {
 class CardStrike: Card {
     
     override func play(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        return descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
+        return super.play(state: state, descision: descision).then { (_) -> Promise<IDamagable> in
+            return descision.chooseTarget(state: state, card: self)
+        }.then { (damagable) -> Promise<Void> in
             return damagable.applyDamage(damage: 12).asVoid()
         }.done { (_) in
             state.playerState.discard(card: self)
@@ -107,7 +179,7 @@ class CardStrike: Card {
         return CardStrike(
             uuid: UUID(),
             name: "Strike",
-            cost: Cost.free(),
+            cost: Cost.from(string: "M"),
             text: "Deals 12 damage to a target"
         )
     }
@@ -116,16 +188,17 @@ class CardStrike: Card {
 
 class CardDefend: Card {
     override func play(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        state.playerState.currentBlock += 6
-        state.playerState.discard(card: self)
-        return Promise<Void>()
+        return super.play(state: state, descision: descision).done { (_) -> Void in
+            state.playerState.currentBlock += 6
+            state.playerState.discard(card: self)
+        }
     }
     
     class func newInstance() -> CardDefend {
         return CardDefend(
             uuid: UUID(),
             name: "Defend",
-            cost: Cost.free(),
+            cost: Cost.from(string: "F"),
             text: "Gain 6 Block"
         )
     }
@@ -138,9 +211,11 @@ class DummyPlayer: IDescisionMaker {
     
     func chooseAction(state: BattleState) -> Promise<PlayerAction> {
         
-        // Just play the next card in your hand...
+        // Just play the next card you can afford...
         
-        guard let nextCard = state.playerState.hand.cards.first else {
+        guard let nextCard = (state.playerState.hand.cards.first { (c) -> Bool in
+            state.playerState.canPlay(card: c)
+        }) else {
             return Promise<PlayerAction>.value(.pass)
         }
         
