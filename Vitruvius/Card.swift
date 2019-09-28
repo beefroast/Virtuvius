@@ -246,6 +246,42 @@ class CardDefend: Card {
     }
 }
 
+class CardHeal: Card {
+    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+        state.playerState.hp = min(state.playerState.hp + 12, state.playerState.maxHp)
+        return Promise<Void>()
+    }
+    
+    class func newInstance() -> Card {
+        return CardHeal(
+            uuid: UUID(),
+            name: "Heal",
+            cost: Cost.from(string: "F"),
+            text: "Heal for 12"
+        )
+    }
+}
+
+class CardAnger: Card {
+    
+    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+        return descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
+            return damagable.applyDamage(damage: 6).asVoid()
+        }.done { (_) in
+            state.playerState.discard.push(elt: CardAnger.newInstance())
+        }
+    }
+
+    
+    class func newInstance() -> CardAnger {
+        return CardAnger(
+            uuid: UUID(),
+            name: "Anger",
+            cost: Cost.free(),
+            text: "Deals 6 damage to a target. Put a copy of Anger into your discard pile."
+        )
+    }
+}
 
 
 class DummyPlayer: IDescisionMaker {

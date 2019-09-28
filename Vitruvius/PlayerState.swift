@@ -81,7 +81,8 @@ class PlayerState: IDamagable {
             let lines = [
                 "HP: (\(self.currentBlock)) \(self.hp), \(self.maxHp)",
                 "Mana: \(self.currentMana.toString())",
-                "Hand: \(self.hand.cards.map({ $0.name }).joined(separator: ", "))"
+                "Hand: \(self.hand.cards.map({ $0.name }).joined(separator: ", "))",
+                "Deck/Discard: \(self.drawPile.draws.count) \(self.discard.getCount())"
             ]
             return lines.joined(separator: "\n")
         }
