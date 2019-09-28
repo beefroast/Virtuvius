@@ -1,0 +1,760 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		28A400BA748335E6DC716810 /* Pods_Vitruvius.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBC4D70752166C95B66E68B /* Pods_Vitruvius.framework */; };
+		5AEC3D30E3665758388DDC80 /* Pods_VitruviusTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A6BF7DBE4AF825291CBACC /* Pods_VitruviusTests.framework */; };
+		64092289233E0B45005C2EB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64092288233E0B45005C2EB7 /* AppDelegate.swift */; };
+		6409228B233E0B45005C2EB7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6409228A233E0B45005C2EB7 /* SceneDelegate.swift */; };
+		6409228D233E0B45005C2EB7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6409228C233E0B45005C2EB7 /* ContentView.swift */; };
+		6409228F233E0B48005C2EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6409228E233E0B48005C2EB7 /* Assets.xcassets */; };
+		64092292233E0B48005C2EB7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64092291233E0B48005C2EB7 /* Preview Assets.xcassets */; };
+		64092295233E0B48005C2EB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64092293233E0B48005C2EB7 /* LaunchScreen.storyboard */; };
+		640922A0233E0B48005C2EB7 /* VitruviusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6409229F233E0B48005C2EB7 /* VitruviusTests.swift */; };
+		640922AB233E0B48005C2EB7 /* VitruviusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922AA233E0B48005C2EB7 /* VitruviusUITests.swift */; };
+		640922B9233E0B74005C2EB7 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922B8233E0B74005C2EB7 /* Card.swift */; };
+		640922BB233E10CA005C2EB7 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922BA233E10CA005C2EB7 /* Stack.swift */; };
+		640922BD233F0501005C2EB7 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922BC233F0501005C2EB7 /* PlayerState.swift */; };
+		6472428F233F0F3D006BB6A3 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6472428E233F0F3D006BB6A3 /* Enemy.swift */; };
+		64C2B4AC233F07440051041C /* BattleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C2B4AB233F07440051041C /* BattleState.swift */; };
+		F32E0F8DAED1EC87D8246D07 /* Pods_VitruviusUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B827E080F60AEE9DFB097BC9 /* Pods_VitruviusUITests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6409229C233E0B48005C2EB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6409227D233E0B45005C2EB7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 64092284233E0B45005C2EB7;
+			remoteInfo = Vitruvius;
+		};
+		640922A7233E0B48005C2EB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6409227D233E0B45005C2EB7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 64092284233E0B45005C2EB7;
+			remoteInfo = Vitruvius;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0BD044021C7E677A58789C9E /* Pods-VitruviusUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VitruviusUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VitruviusUITests/Pods-VitruviusUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		0CD41ADA57E37DA5B65069F7 /* Pods-Vitruvius.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vitruvius.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vitruvius/Pods-Vitruvius.debug.xcconfig"; sourceTree = "<group>"; };
+		20A6BF7DBE4AF825291CBACC /* Pods_VitruviusTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VitruviusTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		45CC120707EAF55370394687 /* Pods-Vitruvius.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vitruvius.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vitruvius/Pods-Vitruvius.release.xcconfig"; sourceTree = "<group>"; };
+		4EBC4D70752166C95B66E68B /* Pods_Vitruvius.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vitruvius.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		64092285233E0B45005C2EB7 /* Vitruvius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitruvius.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		64092288233E0B45005C2EB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6409228A233E0B45005C2EB7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6409228C233E0B45005C2EB7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6409228E233E0B48005C2EB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		64092291233E0B48005C2EB7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		64092294233E0B48005C2EB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		64092296233E0B48005C2EB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6409229B233E0B48005C2EB7 /* VitruviusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitruviusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6409229F233E0B48005C2EB7 /* VitruviusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitruviusTests.swift; sourceTree = "<group>"; };
+		640922A1233E0B48005C2EB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		640922A6233E0B48005C2EB7 /* VitruviusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VitruviusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		640922AA233E0B48005C2EB7 /* VitruviusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitruviusUITests.swift; sourceTree = "<group>"; };
+		640922AC233E0B48005C2EB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		640922B8233E0B74005C2EB7 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		640922BA233E10CA005C2EB7 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		640922BC233F0501005C2EB7 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
+		6472428E233F0F3D006BB6A3 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		64C2B4AB233F07440051041C /* BattleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleState.swift; sourceTree = "<group>"; };
+		B49964CE5CEA5929683C4CB2 /* Pods-VitruviusUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VitruviusUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VitruviusUITests/Pods-VitruviusUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B827E080F60AEE9DFB097BC9 /* Pods_VitruviusUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VitruviusUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D27C7FD3F5E3DE7B55F1BD25 /* Pods-VitruviusTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VitruviusTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VitruviusTests/Pods-VitruviusTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F8B54A27414FFBF6A49A24EC /* Pods-VitruviusTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VitruviusTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VitruviusTests/Pods-VitruviusTests.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		64092282233E0B45005C2EB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28A400BA748335E6DC716810 /* Pods_Vitruvius.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		64092298233E0B48005C2EB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AEC3D30E3665758388DDC80 /* Pods_VitruviusTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		640922A3233E0B48005C2EB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F32E0F8DAED1EC87D8246D07 /* Pods_VitruviusUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C6FBDCBAC0411EE9CBA5E01 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4EBC4D70752166C95B66E68B /* Pods_Vitruvius.framework */,
+				20A6BF7DBE4AF825291CBACC /* Pods_VitruviusTests.framework */,
+				B827E080F60AEE9DFB097BC9 /* Pods_VitruviusUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6409227C233E0B45005C2EB7 = {
+			isa = PBXGroup;
+			children = (
+				64092287233E0B45005C2EB7 /* Vitruvius */,
+				6409229E233E0B48005C2EB7 /* VitruviusTests */,
+				640922A9233E0B48005C2EB7 /* VitruviusUITests */,
+				64092286233E0B45005C2EB7 /* Products */,
+				85E72A0CE19309E006854A48 /* Pods */,
+				4C6FBDCBAC0411EE9CBA5E01 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		64092286233E0B45005C2EB7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				64092285233E0B45005C2EB7 /* Vitruvius.app */,
+				6409229B233E0B48005C2EB7 /* VitruviusTests.xctest */,
+				640922A6233E0B48005C2EB7 /* VitruviusUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		64092287233E0B45005C2EB7 /* Vitruvius */ = {
+			isa = PBXGroup;
+			children = (
+				64092288233E0B45005C2EB7 /* AppDelegate.swift */,
+				6409228A233E0B45005C2EB7 /* SceneDelegate.swift */,
+				6409228C233E0B45005C2EB7 /* ContentView.swift */,
+				6409228E233E0B48005C2EB7 /* Assets.xcassets */,
+				64092293233E0B48005C2EB7 /* LaunchScreen.storyboard */,
+				64092296233E0B48005C2EB7 /* Info.plist */,
+				64092290233E0B48005C2EB7 /* Preview Content */,
+				640922B8233E0B74005C2EB7 /* Card.swift */,
+				6472428E233F0F3D006BB6A3 /* Enemy.swift */,
+				640922BA233E10CA005C2EB7 /* Stack.swift */,
+				640922BC233F0501005C2EB7 /* PlayerState.swift */,
+				64C2B4AB233F07440051041C /* BattleState.swift */,
+			);
+			path = Vitruvius;
+			sourceTree = "<group>";
+		};
+		64092290233E0B48005C2EB7 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				64092291233E0B48005C2EB7 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6409229E233E0B48005C2EB7 /* VitruviusTests */ = {
+			isa = PBXGroup;
+			children = (
+				6409229F233E0B48005C2EB7 /* VitruviusTests.swift */,
+				640922A1233E0B48005C2EB7 /* Info.plist */,
+			);
+			path = VitruviusTests;
+			sourceTree = "<group>";
+		};
+		640922A9233E0B48005C2EB7 /* VitruviusUITests */ = {
+			isa = PBXGroup;
+			children = (
+				640922AA233E0B48005C2EB7 /* VitruviusUITests.swift */,
+				640922AC233E0B48005C2EB7 /* Info.plist */,
+			);
+			path = VitruviusUITests;
+			sourceTree = "<group>";
+		};
+		85E72A0CE19309E006854A48 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0CD41ADA57E37DA5B65069F7 /* Pods-Vitruvius.debug.xcconfig */,
+				45CC120707EAF55370394687 /* Pods-Vitruvius.release.xcconfig */,
+				D27C7FD3F5E3DE7B55F1BD25 /* Pods-VitruviusTests.debug.xcconfig */,
+				F8B54A27414FFBF6A49A24EC /* Pods-VitruviusTests.release.xcconfig */,
+				0BD044021C7E677A58789C9E /* Pods-VitruviusUITests.debug.xcconfig */,
+				B49964CE5CEA5929683C4CB2 /* Pods-VitruviusUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		64092284233E0B45005C2EB7 /* Vitruvius */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 640922AF233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "Vitruvius" */;
+			buildPhases = (
+				B102BB446C28BA70EEA07BB7 /* [CP] Check Pods Manifest.lock */,
+				64092281233E0B45005C2EB7 /* Sources */,
+				64092282233E0B45005C2EB7 /* Frameworks */,
+				64092283233E0B45005C2EB7 /* Resources */,
+				F2CC288F2EBF8FC1B561F253 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Vitruvius;
+			productName = Vitruvius;
+			productReference = 64092285233E0B45005C2EB7 /* Vitruvius.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6409229A233E0B48005C2EB7 /* VitruviusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 640922B2233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "VitruviusTests" */;
+			buildPhases = (
+				D569ACFE834AA034A1FE44DF /* [CP] Check Pods Manifest.lock */,
+				64092297233E0B48005C2EB7 /* Sources */,
+				64092298233E0B48005C2EB7 /* Frameworks */,
+				64092299233E0B48005C2EB7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6409229D233E0B48005C2EB7 /* PBXTargetDependency */,
+			);
+			name = VitruviusTests;
+			productName = VitruviusTests;
+			productReference = 6409229B233E0B48005C2EB7 /* VitruviusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		640922A5233E0B48005C2EB7 /* VitruviusUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 640922B5233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "VitruviusUITests" */;
+			buildPhases = (
+				98203FABD597C3FC0DC6D4D1 /* [CP] Check Pods Manifest.lock */,
+				640922A2233E0B48005C2EB7 /* Sources */,
+				640922A3233E0B48005C2EB7 /* Frameworks */,
+				640922A4233E0B48005C2EB7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				640922A8233E0B48005C2EB7 /* PBXTargetDependency */,
+			);
+			name = VitruviusUITests;
+			productName = VitruviusUITests;
+			productReference = 640922A6233E0B48005C2EB7 /* VitruviusUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6409227D233E0B45005C2EB7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Benjamin Frost";
+				TargetAttributes = {
+					64092284233E0B45005C2EB7 = {
+						CreatedOnToolsVersion = 11.0;
+					};
+					6409229A233E0B48005C2EB7 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 64092284233E0B45005C2EB7;
+					};
+					640922A5233E0B48005C2EB7 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 64092284233E0B45005C2EB7;
+					};
+				};
+			};
+			buildConfigurationList = 64092280233E0B45005C2EB7 /* Build configuration list for PBXProject "Vitruvius" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6409227C233E0B45005C2EB7;
+			productRefGroup = 64092286233E0B45005C2EB7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				64092284233E0B45005C2EB7 /* Vitruvius */,
+				6409229A233E0B48005C2EB7 /* VitruviusTests */,
+				640922A5233E0B48005C2EB7 /* VitruviusUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		64092283233E0B45005C2EB7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64092295233E0B48005C2EB7 /* LaunchScreen.storyboard in Resources */,
+				64092292233E0B48005C2EB7 /* Preview Assets.xcassets in Resources */,
+				6409228F233E0B48005C2EB7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		64092299233E0B48005C2EB7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		640922A4233E0B48005C2EB7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		98203FABD597C3FC0DC6D4D1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VitruviusUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B102BB446C28BA70EEA07BB7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Vitruvius-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D569ACFE834AA034A1FE44DF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VitruviusTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2CC288F2EBF8FC1B561F253 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Vitruvius/Pods-Vitruvius-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vitruvius/Pods-Vitruvius-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		64092281233E0B45005C2EB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64C2B4AC233F07440051041C /* BattleState.swift in Sources */,
+				64092289233E0B45005C2EB7 /* AppDelegate.swift in Sources */,
+				640922BB233E10CA005C2EB7 /* Stack.swift in Sources */,
+				6409228B233E0B45005C2EB7 /* SceneDelegate.swift in Sources */,
+				6472428F233F0F3D006BB6A3 /* Enemy.swift in Sources */,
+				6409228D233E0B45005C2EB7 /* ContentView.swift in Sources */,
+				640922BD233F0501005C2EB7 /* PlayerState.swift in Sources */,
+				640922B9233E0B74005C2EB7 /* Card.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		64092297233E0B48005C2EB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				640922A0233E0B48005C2EB7 /* VitruviusTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		640922A2233E0B48005C2EB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				640922AB233E0B48005C2EB7 /* VitruviusUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6409229D233E0B48005C2EB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 64092284233E0B45005C2EB7 /* Vitruvius */;
+			targetProxy = 6409229C233E0B48005C2EB7 /* PBXContainerItemProxy */;
+		};
+		640922A8233E0B48005C2EB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 64092284233E0B45005C2EB7 /* Vitruvius */;
+			targetProxy = 640922A7233E0B48005C2EB7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		64092293233E0B48005C2EB7 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				64092294233E0B48005C2EB7 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		640922AD233E0B48005C2EB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		640922AE233E0B48005C2EB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		640922B0233E0B48005C2EB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CD41ADA57E37DA5B65069F7 /* Pods-Vitruvius.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Vitruvius/Preview Content\"";
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Vitruvius/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.Vitruvius;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		640922B1233E0B48005C2EB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45CC120707EAF55370394687 /* Pods-Vitruvius.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Vitruvius/Preview Content\"";
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Vitruvius/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.Vitruvius;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		640922B3233E0B48005C2EB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D27C7FD3F5E3DE7B55F1BD25 /* Pods-VitruviusTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				INFOPLIST_FILE = VitruviusTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.VitruviusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Vitruvius.app/Vitruvius";
+			};
+			name = Debug;
+		};
+		640922B4233E0B48005C2EB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8B54A27414FFBF6A49A24EC /* Pods-VitruviusTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				INFOPLIST_FILE = VitruviusTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.VitruviusTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Vitruvius.app/Vitruvius";
+			};
+			name = Release;
+		};
+		640922B6233E0B48005C2EB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BD044021C7E677A58789C9E /* Pods-VitruviusUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				INFOPLIST_FILE = VitruviusUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.VitruviusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Vitruvius;
+			};
+			name = Debug;
+		};
+		640922B7233E0B48005C2EB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B49964CE5CEA5929683C4CB2 /* Pods-VitruviusUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R7RTM529H4;
+				INFOPLIST_FILE = VitruviusUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jonathon.dollal.VitruviusUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Vitruvius;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		64092280233E0B45005C2EB7 /* Build configuration list for PBXProject "Vitruvius" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				640922AD233E0B48005C2EB7 /* Debug */,
+				640922AE233E0B48005C2EB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		640922AF233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "Vitruvius" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				640922B0233E0B48005C2EB7 /* Debug */,
+				640922B1233E0B48005C2EB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		640922B2233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "VitruviusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				640922B3233E0B48005C2EB7 /* Debug */,
+				640922B4233E0B48005C2EB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		640922B5233E0B48005C2EB7 /* Build configuration list for PBXNativeTarget "VitruviusUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				640922B6233E0B48005C2EB7 /* Debug */,
+				640922B7233E0B48005C2EB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6409227D233E0B45005C2EB7 /* Project object */;
+}
