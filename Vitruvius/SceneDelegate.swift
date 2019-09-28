@@ -101,7 +101,7 @@ class GameSimulator {
             CardStrike.newInstance(),
             CardStrike.newInstance(),
             CardStrike.newInstance(),
-            CardStrike.newInstance(),
+            CardCleave.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),
