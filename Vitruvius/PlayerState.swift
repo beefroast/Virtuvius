@@ -11,7 +11,7 @@ import PromiseKit
 
 class PlayerState {
 
-    var body: DamagableBody
+    var body: IDamagable
     var currentMana: Cost
     var manaPerTurn: Cost
     let hand: Hand
