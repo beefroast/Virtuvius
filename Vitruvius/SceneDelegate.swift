@@ -100,9 +100,7 @@ class GameSimulator {
             CardStrike.newInstance(),
             CardStrike.newInstance(),
             CardStrike.newInstance(),
-            CardAnger.newInstance(),
-            CardCleave.newInstance(),
-            CardHeal.newInstance(),
+            CardDrain.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),
@@ -116,7 +114,7 @@ class GameSimulator {
         ])
         
         battleState.playerState.drawCardsIntoHand()
-        battleState.playerState.addManaForTurn()
+        battleState.playerState.onTurnBegins()
         
         return tick(battleState: battleState)
     }

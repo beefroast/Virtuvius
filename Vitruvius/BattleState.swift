@@ -66,12 +66,12 @@ class BattleState {
                 print("\nPlayer passes\n")
                 
                 // Player discards their hand
-                self.playerState.discardHand()
-                self.playerState.drawCardsIntoHand()
-                self.playerState.addManaForTurn()
+                self.playerState.onTurnEnds()
                 
                 let enemyPromises = self.enemies.map({ $0.takeTurn(state: self) })
-                return when(fulfilled: enemyPromises)
+                return when(fulfilled: enemyPromises).done { (_) in
+                    self.playerState.onTurnBegins()
+                }
                 
             }
             

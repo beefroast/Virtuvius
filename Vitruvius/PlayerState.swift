@@ -88,18 +88,67 @@ class PlayerState: IDamagable {
         }
     }
     
+    // Turn hooks
+    
+    func onTurnBegins() {
+        // Lose all your current block
+        self.loseBlock(block: self.currentBlock)
+        // Get mana
+        self.addManaForTurn()
+    }
+    
+    func onTurnEnds() {
+        // Discard your hand
+        self.discardHand()
+        self.drawCardsIntoHand()
+    }
+    
     // IDamagable
     
-    func applyDamage(damage: Int) -> Promise<Bool> {
+    func applyDamage(damage: Int) -> Promise<DamageReport> {
         
-        let hpLost = max(0, damage - self.currentBlock)
+        let hpLost = min(max(0, damage - self.currentBlock), self.hp)
         let blockLost = damage - hpLost
         
-        self.hp -= hpLost
-        self.currentBlock -= blockLost
+        let totalBlockLost = self.loseBlock(block: blockLost)
+        let totalHpLost = self.loseHp(damage: hpLost)
+        
+        let report = DamageReport(
+            target: self,
+            unblockedDamageDealt: totalHpLost,
+            blockedDamageDealt: totalBlockLost,
+            targetKilled: self.hp == 0
+        )
 
-        return Promise<Bool>.value(false)
+        return Promise<DamageReport>.value(report)
     }
+    
+    func gainBlock(block: Int) -> Int {
+        self.currentBlock += block
+        return block
+    }
+    
+    func loseBlock(block: Int) -> Int {
+        let updatedBlock = max(self.currentBlock - block, 0)
+        let deltaBlock = self.currentBlock - updatedBlock
+        self.currentBlock = updatedBlock
+        return deltaBlock
+    }
+    
+    func healHp(heal: Int) -> Int {
+        let updatedHp = min(self.hp + heal, self.maxHp)
+        let deltaHp = updatedHp - self.hp
+        self.hp = updatedHp
+        return deltaHp
+    }
+    
+    func loseHp(damage: Int) -> Int {
+        let updatedHp = max(self.hp - damage, 0)
+        let deltaHp = self.hp - updatedHp
+        self.hp = updatedHp
+        return deltaHp
+    }
+    
 }
 
 class Hand {

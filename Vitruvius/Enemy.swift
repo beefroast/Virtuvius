@@ -23,15 +23,22 @@ class Enemy: IDamagable {
         self.block = 0
     }
     
-    func applyDamage(damage: Int) -> Promise<Bool> {
+    func applyDamage(damage: Int) -> Promise<DamageReport> {
         
-        let hpLost = max(0, damage - self.block)
+        let hpLost = min(max(0, damage - self.block), self.hp)
         let blockLost = damage - hpLost
         
         self.hp -= hpLost
         self.block -= blockLost
+        
+        let report = DamageReport(
+            target: self,
+            unblockedDamageDealt: hpLost,
+            blockedDamageDealt: blockLost,
+            targetKilled: self.hp == 0
+        )
 
-        return Promise<Bool>.value(false)
+        return Promise<DamageReport>.value(report)
     }
     
     func takeTurn(state: BattleState) -> Promise<Void> {

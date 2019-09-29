@@ -127,7 +127,7 @@ struct Cost {
 }
 
 protocol IDamagable {
-    func applyDamage(damage: Int) -> Promise<Bool>
+    func applyDamage(damage: Int) -> Promise<DamageReport>
 }
 
 struct DamageReport {
@@ -213,7 +213,7 @@ class CardStrike: Card {
 class CardCleave: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        let damagePromises = state.enemies.map { (en) -> Promise<Bool> in
+        let damagePromises = state.enemies.map { (en) -> Promise<DamageReport> in
             en.applyDamage(damage: 11)
         }
         return when(fulfilled: damagePromises).asVoid()
