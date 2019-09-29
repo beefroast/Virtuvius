@@ -35,7 +35,7 @@ class BattleState {
     }
     
     func outcome() -> BattleOutcome {
-        if playerState.hp <= 0 {
+        if playerState.body.isAlive == false {
             return .defeat
         } else if enemies.count == 0 {
             return .victory
@@ -57,7 +57,7 @@ class BattleState {
                 
                 return card.play(state: self, descision: self.player).done { (_) in
                     self.enemies.removeAll { (enemy) -> Bool in
-                        enemy.hp <= 0
+                        enemy.body.isAlive == false
                     }
                 }
                 

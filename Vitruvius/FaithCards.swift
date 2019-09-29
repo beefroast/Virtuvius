@@ -15,7 +15,7 @@ class CardDrain: Card {
         descision.chooseTarget(state: state, card: self).then { (dmg) -> Promise<DamageReport> in
             dmg.applyDamage(damage: 6)
         }.done { (damage) -> Void in
-            state.playerState.healHp(heal: damage.unblockedDamageDealt)
+            _ = state.playerState.body.healHp(heal: damage.unblockedDamageDealt)
         }
     }
     

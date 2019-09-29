@@ -126,16 +126,7 @@ struct Cost {
     
 }
 
-protocol IDamagable {
-    func applyDamage(damage: Int) -> Promise<DamageReport>
-}
 
-struct DamageReport {
-    let target: IDamagable
-    let unblockedDamageDealt: Int
-    let blockedDamageDealt: Int
-    let targetKilled: Bool
-}
 
 protocol IDescisionMaker {
     func chooseAction(state: BattleState) -> Promise<PlayerAction>
@@ -214,7 +205,7 @@ class CardCleave: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
         let damagePromises = state.enemies.map { (en) -> Promise<DamageReport> in
-            en.applyDamage(damage: 11)
+            en.body.applyDamage(damage: 11)
         }
         return when(fulfilled: damagePromises).asVoid()
     }
@@ -232,7 +223,7 @@ class CardCleave: Card {
 class CardDefend: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        state.playerState.currentBlock += 6
+        state.playerState.body.gainBlock(block: 6)
         return Promise<Void>()
     }
 
@@ -248,7 +239,7 @@ class CardDefend: Card {
 
 class CardHeal: Card {
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        state.playerState.hp = min(state.playerState.hp + 12, state.playerState.maxHp)
+        state.playerState.body.healHp(heal: 12)
         return Promise<Void>()
     }
     
@@ -306,7 +297,7 @@ class DummyPlayer: IDescisionMaker {
             return Promise<IDamagable>.init(error: NSError(domain: "", code: 0, userInfo: nil))
         }
         
-        return Promise<IDamagable>.value(enemy)
+        return Promise<IDamagable>.value(enemy.body)
     }
     
 }

@@ -9,36 +9,14 @@
 import Foundation
 import PromiseKit
 
-class Enemy: IDamagable {
+class Enemy {
 
     let name: String
-    var hp: Int
-    var maxHp: Int
-    var block: Int
+    var body: IDamagable
     
-    init(name: String, hp: Int, maxHp: Int, block: Int) {
+    init(name: String, body: IDamagable) {
         self.name = name
-        self.hp = hp
-        self.maxHp = maxHp
-        self.block = 0
-    }
-    
-    func applyDamage(damage: Int) -> Promise<DamageReport> {
-        
-        let hpLost = min(max(0, damage - self.block), self.hp)
-        let blockLost = damage - hpLost
-        
-        self.hp -= hpLost
-        self.block -= blockLost
-        
-        let report = DamageReport(
-            target: self,
-            unblockedDamageDealt: hpLost,
-            blockedDamageDealt: blockLost,
-            targetKilled: self.hp == 0
-        )
-
-        return Promise<DamageReport>.value(report)
+        self.body = body
     }
     
     func takeTurn(state: BattleState) -> Promise<Void> {
@@ -47,7 +25,7 @@ class Enemy: IDamagable {
     
     var description: String {
         get {
-            return "\(name): (\(block)) \(hp)/\(maxHp)"
+            return "\(name): \(body.description)"
         }
     }
     
@@ -56,12 +34,12 @@ class Enemy: IDamagable {
 class EnemyGoomba: Enemy {
     
     static func newInstance() -> Enemy {
-        return EnemyGoomba(name: "Goomba", hp: 20, maxHp: 20, block: 0)
+        return EnemyGoomba(name: "Goomba", body: DamagableBody(hp: 20, maxHp: 20, currentBlock: 0))
     }
     
     override func takeTurn(state: BattleState) -> Promise<Void> {
-        return state.playerState.applyDamage(damage: 10).done { _ in
-            self.block = 10
+        return state.playerState.body.applyDamage(damage: 10).done { _ in
+            self.body.gainBlock(block: 10)
         }
     }
 }

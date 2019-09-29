@@ -9,24 +9,19 @@
 import Foundation
 import PromiseKit
 
-class PlayerState: IDamagable {
+class PlayerState {
 
-    var hp: Int
-    var maxHp: Int
+    var body: DamagableBody
     var currentMana: Cost
     var manaPerTurn: Cost
-    var currentBlock: Int
-    
     let hand: Hand
     let drawPile: DrawPile
     let discard: DiscardPile
     
     init(withCards: [Card]) {
-        self.hp = 20
-        self.maxHp = 20
+        self.body = DamagableBody(hp: 20, maxHp: 20, currentBlock: 0)
         self.currentMana = Cost.free()
         self.manaPerTurn = Cost.init(colorless: 0, charm: 0, guile: 0, might: 2, faith: 2, sharp: 0)
-        self.currentBlock = 0
         self.hand = Hand(cards: [])
         self.drawPile = DrawPile(cards: withCards)
         self.discard = DiscardPile()
@@ -79,7 +74,7 @@ class PlayerState: IDamagable {
     var description: String {
         get {
             let lines = [
-                "HP: (\(self.currentBlock)) \(self.hp), \(self.maxHp)",
+                "BODY: \(self.body.description)",
                 "Mana: \(self.currentMana.toString())",
                 "Hand: \(self.hand.cards.map({ $0.name }).joined(separator: ", "))",
                 "Deck/Discard: \(self.drawPile.draws.count) \(self.discard.getCount())"
@@ -92,7 +87,7 @@ class PlayerState: IDamagable {
     
     func onTurnBegins() {
         // Lose all your current block
-        self.loseBlock(block: self.currentBlock)
+        self.body.loseBlock(block: self.body.block)
         // Get mana
         self.addManaForTurn()
     }
@@ -101,52 +96,6 @@ class PlayerState: IDamagable {
         // Discard your hand
         self.discardHand()
         self.drawCardsIntoHand()
-    }
-    
-    // IDamagable
-    
-    func applyDamage(damage: Int) -> Promise<DamageReport> {
-        
-        let hpLost = min(max(0, damage - self.currentBlock), self.hp)
-        let blockLost = damage - hpLost
-        
-        let totalBlockLost = self.loseBlock(block: blockLost)
-        let totalHpLost = self.loseHp(damage: hpLost)
-        
-        let report = DamageReport(
-            target: self,
-            unblockedDamageDealt: totalHpLost,
-            blockedDamageDealt: totalBlockLost,
-            targetKilled: self.hp == 0
-        )
-
-        return Promise<DamageReport>.value(report)
-    }
-    
-    func gainBlock(block: Int) -> Int {
-        self.currentBlock += block
-        return block
-    }
-    
-    func loseBlock(block: Int) -> Int {
-        let updatedBlock = max(self.currentBlock - block, 0)
-        let deltaBlock = self.currentBlock - updatedBlock
-        self.currentBlock = updatedBlock
-        return deltaBlock
-    }
-    
-    func healHp(heal: Int) -> Int {
-        let updatedHp = min(self.hp + heal, self.maxHp)
-        let deltaHp = updatedHp - self.hp
-        self.hp = updatedHp
-        return deltaHp
-    }
-    
-    func loseHp(damage: Int) -> Int {
-        let updatedHp = max(self.hp - damage, 0)
-        let deltaHp = self.hp - updatedHp
-        self.hp = updatedHp
-        return deltaHp
     }
     
 }
