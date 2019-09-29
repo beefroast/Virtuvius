@@ -101,7 +101,7 @@ class GameSimulator {
             CardStrike.newInstance(),
             CardStrike.newInstance(),
             CardDrain.newInstance(),
-            CardDiamondBody.newInstance(),
+            CardMistForm.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),
             CardDefend.newInstance(),

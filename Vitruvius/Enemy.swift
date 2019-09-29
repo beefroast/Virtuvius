@@ -9,12 +9,16 @@
 import Foundation
 import PromiseKit
 
-class Enemy {
+class Enemy: IDamagable {
 
     let name: String
-    var body: IDamagable
     
-    init(name: String, body: IDamagable) {
+    var body: IBody
+    func set(body: IBody) {
+        self.body = body
+    }
+    
+    init(name: String, body: IBody) {
         self.name = name
         self.body = body
     }
@@ -38,7 +42,7 @@ class EnemyGoomba: Enemy {
     }
     
     override func takeTurn(state: BattleState) -> Promise<Void> {
-        return state.playerState.body.applyDamage(damage: 10).done { _ in
+        return state.playerState.applyDamage(damage: 10).done { _ in
             self.body.gainBlock(block: 10)
         }
     }

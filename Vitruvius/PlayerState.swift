@@ -9,9 +9,13 @@
 import Foundation
 import PromiseKit
 
-class PlayerState {
+class PlayerState: IDamagable {
 
-    var body: IDamagable
+    var body: IBody
+    func set(body: IBody) {
+        self.body = body
+    }
+    
     var currentMana: Cost
     var manaPerTurn: Cost
     let hand: Hand

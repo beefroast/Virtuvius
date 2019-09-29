@@ -12,10 +12,10 @@ import PromiseKit
 class CardDrain: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        descision.chooseTarget(state: state, card: self).then { (dmg) -> Promise<DamageReport> in
-            dmg.applyDamage(damage: 6)
-        }.done { (damage) -> Void in
-            _ = state.playerState.body.healHp(heal: damage.unblockedDamageDealt)
+        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<DamageReport> in
+            damagable.applyDamage(damage: 6)
+        }.done { (report) in
+            state.playerState.healHp(heal: report.unblockedDamageDealt)
         }
     }
     

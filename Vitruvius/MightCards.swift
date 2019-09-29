@@ -24,8 +24,9 @@ class CardDiamondBody: Card {
     }
 }
 
-class DiamondBody: DamagableProxy {
-    override func loseHp(damage: Int) -> Int {
-        return super.loseHp(damage: max(damage-1, 0))
+
+class DiamondBody: BodyProxy {
+    override func loseHp(damage: Int) -> (Int, IBody) {
+        return super.loseHp(damage: damage-1)
     }
 }

@@ -3,4 +3,70 @@
    uuid = "033290F2-99C7-4046-93E6-2F11D00F3A0F"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6BC1BFFD-F125-4AE6-8A77-23B614D390D3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Vitruvius/BattleState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "tick()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6BC1BFFD-F125-4AE6-8A77-23B614D390D3 - 9524d5a5aa9e6f54"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Vitruvius.PlayerAction) -&gt; PromiseKit.Promise&lt;()&gt; in Vitruvius.BattleState.tick() -&gt; PromiseKit.Promise&lt;Vitruvius.BattleOutcome&gt;"
+                  moduleName = "Vitruvius"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/benjaminfrost/Documents/Projects/Vitruvius/Vitruvius/BattleState.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "671">
+               </Location>
+               <Location
+                  uuid = "6BC1BFFD-F125-4AE6-8A77-23B614D390D3 - 12cf108e00c9914f"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (()) -&gt; () in closure #1 (Vitruvius.PlayerAction) -&gt; PromiseKit.Promise&lt;()&gt; in Vitruvius.BattleState.tick() -&gt; PromiseKit.Promise&lt;Vitruvius.BattleOutcome&gt;"
+                  moduleName = "Vitruvius"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/benjaminfrost/Documents/Projects/Vitruvius/Vitruvius/BattleState.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "31">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73A53D86-6A9F-4B19-B3D4-5AA53A156896"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Vitruvius/Card.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "play(state:descision:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

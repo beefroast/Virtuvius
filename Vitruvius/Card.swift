@@ -186,10 +186,10 @@ class CardStrike: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
         descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
-            return damagable.applyDamage(damage: 12).asVoid()
+            damagable.applyDamage(damage: 12).asVoid()
         }
+        return Promise<Void>()
     }
-
     
     class func newInstance() -> CardStrike {
         return CardStrike(
@@ -205,7 +205,7 @@ class CardCleave: Card {
     
     override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
         let damagePromises = state.enemies.map { (en) -> Promise<DamageReport> in
-            en.body.applyDamage(damage: 11)
+            en.applyDamage(damage: 11)
         }
         return when(fulfilled: damagePromises).asVoid()
     }
@@ -297,7 +297,7 @@ class DummyPlayer: IDescisionMaker {
             return Promise<IDamagable>.init(error: NSError(domain: "", code: 0, userInfo: nil))
         }
         
-        return Promise<IDamagable>.value(enemy.body)
+        return Promise<IDamagable>.value(enemy)
     }
     
 }
