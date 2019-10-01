@@ -10,23 +10,33 @@ import Foundation
 
 
 protocol IPlayer {
+    
     var name: String { get }
     var body: IBody { get set }
+    
     func drawCard() -> Void
+    func discardCard(card: ICard) -> Void
 }
 
 class DummyTarget: IPlayer {
+
+    
     let name: String
     init(name: String) {
         self.name = name
     }
     func drawCard() -> Void {}
+    
+    func discardCard(card: ICard) {}
+    
     var body: IBody = DamagableBody(hp: 20, maxHp: 20, currentBlock: 4)
 }
 
 protocol ICard {
     var name: String { get }
-    func resolve(source: IPlayer, handler: EventHandler) -> Void
+    var requiresSingleTarget: Bool { get }
+    var cost: Int { get set }
+    func resolve(source: IPlayer, handler: EventHandler, target: IPlayer?) -> Void
 }
 
 protocol IEffect {
@@ -36,7 +46,12 @@ protocol IEffect {
 enum Event {
     case onTurnBegan(PlayerEvent)
     case onTurnEnded(PlayerEvent)
+    
     case drawCard(PlayerEvent)
+    
+    case discardCard(DiscardCardEvent)
+    
+    case targetChosen(TargetChosenEvent)
     
     case willLoseHp(UpdateBodyEvent)
     case willLoseBlock(UpdateBodyEvent)
@@ -52,6 +67,24 @@ enum Event {
     case attack(AttackEvent)
 }
 
+class DiscardCardEvent {
+    let player: IPlayer
+    let card: ICard
+    init(player: IPlayer, card: ICard) {
+        self.player = player
+        self.card = card
+    }
+}
+
+class TargetChosenEvent {
+    let sourceUuid: UUID
+    let player: IPlayer
+    init(sourceUuid: UUID, player: IPlayer) {
+        self.sourceUuid = sourceUuid
+        self.player = player
+    }
+}
+
 class PlayerEvent {
     var player: IPlayer
     init(player: IPlayer) {
@@ -62,9 +95,11 @@ class PlayerEvent {
 class CardEvent {
     var source: IPlayer
     var card: ICard
-    init(source: IPlayer, card: ICard) {
+    var target: IPlayer?
+    init(source: IPlayer, card: ICard, target: IPlayer? = nil) {
         self.source = source
         self.card = card
+        self.target = target
     }
 }
 
@@ -127,17 +162,35 @@ class EventHandler {
         case .drawCard(let player):
             break
             
+        case .discardCard(let event):
+            event.player.discardCard(card: event.card)
+            print("\(event.player.name) discarded \(event.card.name)")
+            
+        case .targetChosen(let event):
+            break
         
         case .willLoseHp(let bodyEvent):
-            bodyEvent.player.body.loseHp(damage: bodyEvent.amount)
+            // Calculate the amount of lost HP
+            let remainingHp = max(bodyEvent.player.body.hp - bodyEvent.amount, 0)
+            let lostHp = bodyEvent.player.body.hp - remainingHp
+            guard lostHp > 0 else {
+                return
+            }
+            bodyEvent.player.body.loseHp(damage: lostHp)
             self.push(event: Event.didLoseHp(bodyEvent))
             
         case .willLoseBlock(let bodyEvent):
-            bodyEvent.player.body.loseBlock(block: bodyEvent.amount)
+            let remainingBlock = max(bodyEvent.player.body.block - bodyEvent.amount, 0)
+            let lostBlock = bodyEvent.player.body.block - remainingBlock
+            guard lostBlock > 0 else {
+                return
+            }
+            bodyEvent.player.body.loseBlock(block: lostBlock)
             self.push(event: Event.didLoseBlock(bodyEvent))
             
         case .didLoseHp(let bodyEvent):
             print("\(bodyEvent.player.name) lost \(bodyEvent.amount) hp")
+            print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
         case .didLoseBlock(let bodyEvent):
             print("\(bodyEvent.player.name) lost \(bodyEvent.amount) block")
@@ -158,7 +211,7 @@ class EventHandler {
             
         case .playCard(let cardEvent):
             print("\(cardEvent.source.name) played \(cardEvent.card.name)")
-            cardEvent.card.resolve(source: cardEvent.source, handler: self)
+            cardEvent.card.resolve(source: cardEvent.source, handler: self, target: cardEvent.target)
             
         case .attack(let attackEvent):
             
@@ -192,16 +245,24 @@ class EventHandler {
 }
 
 class EventStrikeCard: ICard {
-    
+
     let name =  "Strike"
+    let requiresSingleTarget: Bool = true
+    var cost: Int = 1
     
-    func resolve(source: IPlayer, handler: EventHandler) {
-        // TODO: Choose a target to attack
+    func resolve(source: IPlayer, handler: EventHandler, target: IPlayer?) {
+        
+        guard let target = target else {
+            return
+        }
+        
+        handler.push(event: Event.discardCard(DiscardCardEvent.init(player: source, card: self)))
+        
         handler.push(
             event: Event.attack(
                 AttackEvent(
                     source: source,
-                    targets: [DummyTarget(name: "Dummy")],
+                    targets: [target],
                     amount: 6
                 )
             )
@@ -209,9 +270,16 @@ class EventStrikeCard: ICard {
     }
 }
 
+
+
 class EventDefendCard: ICard {
-    let name = "Defend"
-    func resolve(source: IPlayer, handler: EventHandler) {
+    
+    let name =  "Defend"
+    let requiresSingleTarget: Bool = false
+    var cost: Int = 1
+    
+    func resolve(source: IPlayer, handler: EventHandler, target: IPlayer?) {
+        handler.push(event: Event.discardCard(DiscardCardEvent.init(player: source, card: self)))
         handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, amount: 5)))
     }
 }
@@ -220,8 +288,11 @@ class EventDefendCard: ICard {
 class EventDoubleDamageCard: ICard {
     
     let name = "Double Damage"
+    let requiresSingleTarget: Bool = false
+    var cost: Int = 1
     
-    func resolve(source: IPlayer, handler: EventHandler) {
+    func resolve(source: IPlayer, handler: EventHandler, target: IPlayer?) {
+        handler.push(event: Event.discardCard(DiscardCardEvent.init(player: source, card: self)))
         handler.effectList.append(DoubleDamageTrigger(source: source))
     }
     
