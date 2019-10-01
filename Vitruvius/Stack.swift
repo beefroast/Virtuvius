@@ -65,3 +65,46 @@ class Stack<T> {
     }
 }
 
+class Queue<T> {
+    
+    private var first: LinkedListElement<T>? = nil
+    private var last: LinkedListElement<T>? = nil
+    private var count: Int = 0
+    
+    var isEmpty: Bool {
+        return count == 0
+    }
+    
+    func getCount() -> Int {
+        return count
+    }
+    
+    func enqueue(elt: T) -> Void {
+        let linkedElt = LinkedListElement(element: elt)
+        self.last?.next = linkedElt
+        self.last = linkedElt
+        self.count = self.count + 1
+    }
+    
+    func dequeue() -> T? {
+        let returner = self.first
+        self.first = self.first?.next
+        return returner?.element
+        self.count = max(self.count - 1, 0)
+    }
+    
+    func peek() -> T? {
+        return self.first?.element
+    }
+    
+    func asArray() -> [T] {
+        return self.first?.toArray() ?? []
+    }
+    
+    func removeAll() -> Void {
+        self.first = nil
+        self.last = nil
+        self.count = 0
+    }
+}
+
