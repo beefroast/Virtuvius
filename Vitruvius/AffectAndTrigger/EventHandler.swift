@@ -59,25 +59,26 @@ class PlayerEvent {
 }
 
 class CardEvent {
-    var source: Actor
+    var cardOwner: Actor
     var card: ICard
     var target: Actor?
-    init(source: Actor, card: ICard, target: Actor? = nil) {
-        self.source = source
+    init(cardOwner: Actor, card: ICard, target: Actor? = nil) {
+        self.cardOwner = cardOwner
         self.card = card
         self.target = target
     }
 }
 
 class AttackEvent {
+    
     let sourceUuid: UUID
-    var source: Actor
+    var sourceOwner: Actor
     var targets: [Actor]
     var amount: Int
     
-    init(sourceUuid: UUID, source: Actor, targets: [Actor], amount: Int) {
+    init(sourceUuid: UUID, sourceOwner: Actor, targets: [Actor], amount: Int) {
         self.sourceUuid = sourceUuid
-        self.source = source
+        self.sourceOwner = sourceOwner
         self.targets = targets
         self.amount = amount
     }
@@ -200,14 +201,14 @@ class EventHandler {
             print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
         case .playCard(let cardEvent):
-            print("\(cardEvent.source.name) played \(cardEvent.card.name)")
-            cardEvent.card.resolve(source: cardEvent.source, handler: self, target: cardEvent.target)
+            print("\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
+            cardEvent.card.resolve(source: cardEvent.cardOwner, handler: self, target: cardEvent.target)
             
         case .attack(let attackEvent):
             
             attackEvent.targets.forEach { (target) in
                 
-                print("\(attackEvent.source.name) attacked \(String(describing: attackEvent.targets.first?.name)) for \(attackEvent.amount)")
+                print("\(attackEvent.sourceOwner.name) attacked \(String(describing: attackEvent.targets.first?.name)) for \(attackEvent.amount)")
                 
                 // Send the event to reduce the block
                 
@@ -253,7 +254,7 @@ class EventStrikeCard: ICard {
             event: Event.attack(
                 AttackEvent(
                     sourceUuid: self.uuid,
-                    source: source,
+                    sourceOwner: source,
                     targets: [target],
                     amount: 6
                 )
@@ -339,7 +340,7 @@ class EventSandwichCard: ICard {
         func handle(event: Event, handler: EventHandler) -> Bool {
             switch event {
             case .attack(let event):
-                if event.source.uuid == self.source.uuid {
+                if event.sourceOwner.uuid == self.source.uuid {
                     event.amount += 2
                 }
             default: break

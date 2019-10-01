@@ -51,34 +51,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
             
         
-        handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventStrikeCard(), target: dummy)))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventStrikeCard(), target: dummy)))
         
         handler.push(
             event: Event.playCard(
-                CardEvent.init(source: dummy, card: EventStrikeCard(), target: enemy)
+                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
             )
         )
         
         handler.push(
             event: Event.playCard(
-                CardEvent.init(source: dummy, card: EventStrikeCard(), target: enemy)
+                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
             )
         )
         
         handler.push(
             event: Event.playCard(
-                CardEvent.init(source: dummy, card: EventSandwichCard())
+                CardEvent.init(cardOwner: dummy, card: EventSandwichCard())
             )
         )
         
         
-        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: EventDefendCard())))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: EventDefendCard())))
         
-        handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventDefendCard())))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventDefendCard())))
         
-        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
-        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
-        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
 
         
         

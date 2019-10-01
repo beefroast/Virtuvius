@@ -38,7 +38,7 @@ class CardDrain: ICard {
             event: Event.attack(
                 AttackEvent(
                     sourceUuid: self.uuid,
-                    source: source,
+                    sourceOwner: source,
                     targets: [target],
                     amount: 6
                 )
@@ -86,26 +86,5 @@ class CardDrain: ICard {
             }
         }
     }
-    
-    
 }
 
-//class CardDrain: Card {
-//    
-//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-//        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<DamageReport> in
-//            damagable.applyDamage(damage: 6)
-//        }.done { (report) in
-//            state.playerState.healHp(heal: report.unblockedDamageDealt)
-//        }
-//    }
-//    
-//    static func newInstance() -> Card {
-//        return CardDrain(
-//            uuid: UUID(),
-//            name: "Drain",
-//            cost: Cost.free(),
-//            text: "Drains an opponent for 6"
-//        )
-//    }
-//}
