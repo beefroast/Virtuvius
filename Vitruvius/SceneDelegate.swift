@@ -25,16 +25,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         
+        
         let handler = EventHandler(eventStack: Stack<Event>(), effectList: [])
         
         let dummy = DummyTarget(name: "Player")
         let enemy = DummyTarget(name: "Goomba")
         
-        handler.push(
-            event: Event.playCard(
-                CardEvent.init(source: dummy, card: EventStrikeCard(), target: enemy)
-            )
-        )
+        handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventStrikeCard(), target: dummy)))
         
         handler.push(
             event: Event.playCard(
@@ -44,11 +41,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         handler.push(
             event: Event.playCard(
-                CardEvent.init(source: dummy, card: EventDoubleDamageCard())
+                CardEvent.init(source: dummy, card: EventStrikeCard(), target: enemy)
             )
         )
+        
+        handler.push(
+            event: Event.playCard(
+                CardEvent.init(source: dummy, card: EventSandwichCard())
+            )
+        )
+        
         
         handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: EventDefendCard())))
+        
+        handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventDefendCard())))
         
         print("Beginning")
         
@@ -56,6 +62,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         while performNext {
             performNext = handler.popAndHandle()
         }
+        
+        
+        
         
         print("Ending")
         

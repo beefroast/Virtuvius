@@ -11,6 +11,7 @@ import Foundation
 
 protocol IPlayer {
     
+    var uuid: UUID { get }
     var name: String { get }
     var body: IBody { get set }
     
@@ -20,8 +21,9 @@ protocol IPlayer {
 
 class DummyTarget: IPlayer {
 
-    
+    let uuid: UUID = UUID()
     let name: String
+    
     init(name: String) {
         self.name = name
     }
@@ -33,6 +35,8 @@ class DummyTarget: IPlayer {
 }
 
 protocol ICard {
+    
+    var uuid: UUID { get }
     var name: String { get }
     var requiresSingleTarget: Bool { get }
     var cost: Int { get set }
@@ -40,6 +44,8 @@ protocol ICard {
 }
 
 protocol IEffect {
+    var uuid: UUID { get }
+    var name: String { get }
     func handle(event: Event, handler: EventHandler) -> Bool
 }
 
@@ -245,7 +251,8 @@ class EventHandler {
 }
 
 class EventStrikeCard: ICard {
-
+    
+    let uuid: UUID = UUID()
     let name =  "Strike"
     let requiresSingleTarget: Bool = true
     var cost: Int = 1
@@ -274,6 +281,7 @@ class EventStrikeCard: ICard {
 
 class EventDefendCard: ICard {
     
+    let uuid: UUID = UUID()
     let name =  "Defend"
     let requiresSingleTarget: Bool = false
     var cost: Int = 1
@@ -287,6 +295,7 @@ class EventDefendCard: ICard {
 
 class EventDoubleDamageCard: ICard {
     
+    let uuid: UUID = UUID()
     let name = "Double Damage"
     let requiresSingleTarget: Bool = false
     var cost: Int = 1
@@ -298,6 +307,8 @@ class EventDoubleDamageCard: ICard {
     
     class DoubleDamageTrigger: IEffect {
         
+        let uuid: UUID = UUID()
+        let name = "Double Damage"
         let source: IPlayer
         
         init(source: IPlayer) {
@@ -316,5 +327,39 @@ class EventDoubleDamageCard: ICard {
             }
         }
     }
+}
+
+class EventSandwichCard: ICard {
+
+    let uuid: UUID = UUID()
+    let name = "Sandwich"
+    let requiresSingleTarget: Bool = false
+    var cost: Int = 1
     
+    func resolve(source: IPlayer, handler: EventHandler, target: IPlayer?) {
+        handler.push(event: Event.discardCard(DiscardCardEvent.init(player: source, card: self)))
+        handler.effectList.append(SandwichTrigger(source: source))
+    }
+    
+    class SandwichTrigger: IEffect {
+        
+        let uuid: UUID = UUID()
+        let name = "+2 Damage"
+        let source: IPlayer
+        
+        init(source: IPlayer) {
+            self.source = source
+        }
+        
+        func handle(event: Event, handler: EventHandler) -> Bool {
+            switch event {
+            case .attack(let event):
+                if event.source.uuid == self.source.uuid {
+                    event.amount += 2
+                }
+            default: break
+            }
+            return false
+        }
+    }
 }
