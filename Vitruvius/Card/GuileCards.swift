@@ -9,6 +9,51 @@
 import Foundation
 import PromiseKit
 
+class CardMistForm: ICard {
+    
+    var uuid: UUID = UUID()
+    var name: String = "Mist Form"
+    var requiresSingleTarget: Bool = false
+    var cost: Int = 1
+    
+    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
+        
+        // Push the discard effect
+        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        
+        // Add the mist form effect
+        handler.effectList.append(
+            MistFormEffect(owner: source)
+        )
+    }
+    
+    class MistFormEffect: IEffect {
+        
+        let owner: Actor
+        var uuid: UUID = UUID()
+        var name: String = "Mist Form"
+        
+        init(owner: Actor) {
+            self.owner = owner
+        }
+        
+        func handle(event: Event, handler: EventHandler) -> Bool {
+            switch event {
+                
+            case .attack(let attackEvent):
+                attackEvent.amount = 0
+                return true
+                
+            default:
+                return false
+            }
+        }
+        
+    }
+    
+    
+}
+
 //class CardMistForm: Card {
 //    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
 //        state.playerState.body = EffectMistForm(body: state.playerState.body)

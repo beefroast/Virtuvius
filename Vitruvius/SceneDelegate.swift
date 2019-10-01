@@ -80,6 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
         handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
 
+        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: CardMistForm())))
         
         
         print("Beginning")
