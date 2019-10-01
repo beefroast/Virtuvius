@@ -151,10 +151,10 @@ class EventHandler {
             self.push(event: Event.didGainBlock(bodyEvent))
             
         case .didGainHp(let bodyEvent):
-            break
+            print("\(bodyEvent.player.name) gained \(bodyEvent.amount) hp")
             
         case .didGainBlock(let bodyEvent):
-            break
+            print("\(bodyEvent.player.name) gained \(bodyEvent.amount) block")
             
         case .playCard(let cardEvent):
             print("\(cardEvent.source.name) played \(cardEvent.card.name)")
@@ -207,8 +207,15 @@ class EventStrikeCard: ICard {
             )
         )
     }
-    
 }
+
+class EventDefendCard: ICard {
+    let name = "Defend"
+    func resolve(source: IPlayer, handler: EventHandler) {
+        handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, amount: 5)))
+    }
+}
+
 
 class EventDoubleDamageCard: ICard {
     

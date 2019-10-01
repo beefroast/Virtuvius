@@ -53,6 +53,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
         )
         
+        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: EventDefendCard())))
+        
         print("Beginning")
         
         var performNext: Bool = true
