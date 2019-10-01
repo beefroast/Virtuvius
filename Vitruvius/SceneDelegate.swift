@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let dummy = Actor(
             uuid: UUID(),
             name: "Player",
-            body: Body(block: 0, hp: 20, maxHp: 20),
+            body: Body(block: 0, hp: 10, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let enemy = Actor(
             uuid: UUID(),
             name: "Enemy",
-            body: Body(block: 0, hp: 20, maxHp: 20),
+            body: Body(block: 3, hp: 20, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
@@ -75,6 +75,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: EventDefendCard())))
         
         handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventDefendCard())))
+        
+        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
+        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
+        handler.push(event: Event.playCard(CardEvent.init(source: dummy, card: CardDrain(), target: enemy)))
+
+        
         
         print("Beginning")
         

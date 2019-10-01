@@ -164,11 +164,8 @@
 				64092296233E0B48005C2EB7 /* Info.plist */,
 				64092290233E0B48005C2EB7 /* Preview Content */,
 				640922B8233E0B74005C2EB7 /* Card.swift */,
-				64724294234056D8006BB6A3 /* FaithCards.swift */,
-				64724292233F870F006BB6A3 /* CharmCards.swift */,
 				6472428E233F0F3D006BB6A3 /* Enemy.swift */,
 				640922BA233E10CA005C2EB7 /* Stack.swift */,
-				6472429A234067F6006BB6A3 /* GuileCards.swift */,
 				640922BC233F0501005C2EB7 /* PlayerState.swift */,
 				64C2B4AB233F07440051041C /* BattleState.swift */,
 				6434F2B72343279D0040C892 /* ActorState */,
@@ -217,6 +214,9 @@
 			isa = PBXGroup;
 			children = (
 				6434F2BE2343288B0040C892 /* ICard.swift */,
+				64724294234056D8006BB6A3 /* FaithCards.swift */,
+				64724292233F870F006BB6A3 /* CharmCards.swift */,
+				6472429A234067F6006BB6A3 /* GuileCards.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";

@@ -70,10 +70,13 @@ class CardEvent {
 }
 
 class AttackEvent {
+    let sourceUuid: UUID
     var source: Actor
     var targets: [Actor]
     var amount: Int
-    init(source: Actor, targets: [Actor], amount: Int) {
+    
+    init(sourceUuid: UUID, source: Actor, targets: [Actor], amount: Int) {
+        self.sourceUuid = sourceUuid
         self.source = source
         self.targets = targets
         self.amount = amount
@@ -81,11 +84,23 @@ class AttackEvent {
 }
 
 class UpdateBodyEvent {
+    
     var player: Actor
+    let sourceUuid: UUID
     var amount: Int
-    init(player: Actor, amount: Int) {
+    
+    init(player: Actor, sourceUuid: UUID, amount: Int) {
         self.player = player
+        self.sourceUuid = sourceUuid
         self.amount = amount
+    }
+    
+    func with(amount: Int) -> UpdateBodyEvent {
+        return UpdateBodyEvent(
+            player: self.player,
+            sourceUuid: self.sourceUuid,
+            amount: amount
+        )
     }
 }
 
@@ -169,7 +184,7 @@ class EventHandler {
             let nextHp = min(bodyEvent.player.body.hp + bodyEvent.amount, bodyEvent.player.body.maxHp)
             let gainedLife = nextHp - bodyEvent.player.body.hp
             bodyEvent.player.body.hp += gainedLife
-            let event = UpdateBodyEvent(player: bodyEvent.player, amount: gainedLife)
+            let event = bodyEvent.with(amount: gainedLife)
             self.push(event: Event.didGainHp(event))
             
         case .willGainBlock(let bodyEvent):
@@ -192,7 +207,7 @@ class EventHandler {
             
             attackEvent.targets.forEach { (target) in
                 
-                print("\(attackEvent.source.name) attacked \(attackEvent.targets.first?.name) for \(attackEvent.amount)")
+                print("\(attackEvent.source.name) attacked \(String(describing: attackEvent.targets.first?.name)) for \(attackEvent.amount)")
                 
                 // Send the event to reduce the block
                 
@@ -203,14 +218,14 @@ class EventHandler {
                 if damageRemaining > 0 {
                     self.eventStack.push(elt:
                         Event.willLoseHp(
-                            UpdateBodyEvent(player: target, amount: damageRemaining)
+                            UpdateBodyEvent(player: target, sourceUuid: attackEvent.sourceUuid, amount: damageRemaining)
                         )
                     )
                 }
                 
                 self.eventStack.push(elt:
                     Event.willLoseBlock(
-                        UpdateBodyEvent(player: target, amount: blockLost)
+                        UpdateBodyEvent(player: target, sourceUuid: attackEvent.sourceUuid, amount: blockLost)
                     )
                 )
             }
@@ -237,6 +252,7 @@ class EventStrikeCard: ICard {
         handler.push(
             event: Event.attack(
                 AttackEvent(
+                    sourceUuid: self.uuid,
                     source: source,
                     targets: [target],
                     amount: 6
@@ -257,7 +273,7 @@ class EventDefendCard: ICard {
     
     func resolve(source: Actor, handler: EventHandler, target: Actor?) {
         handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, amount: 5)))
+        handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, sourceUuid: self.uuid, amount: 5)))
     }
 }
 
