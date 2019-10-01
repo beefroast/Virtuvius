@@ -18,14 +18,14 @@ enum CardPowerTypes {
 }
 
 struct Cost {
-    
+
     let colorless: Int
     let charm: Int
     let guile: Int
     let might: Int
     let faith: Int
     let sharp: Int
-    
+
     init(colorless: Int,
          charm: Int,
          guile: Int,
@@ -39,11 +39,11 @@ struct Cost {
         self.faith = faith
         self.sharp = sharp
     }
-    
+
     static func free() -> Cost {
         return Cost(colorless: 0, charm: 0, guile: 0, might: 0, faith: 0, sharp: 0)
     }
-    
+
     static func add(a: Cost, b: Cost) -> Cost {
         return Cost(
             colorless: a.colorless + b.colorless,
@@ -54,15 +54,15 @@ struct Cost {
             sharp: a.sharp + b.sharp
         )
     }
-    
+
     func negative() -> Cost {
         return Cost(colorless: -colorless, charm: -charm, guile: -guile, might: -might, faith: -faith, sharp: -sharp)
     }
-    
+
     func convertedManacost() -> Int {
         return self.colorless + self.charm + self.guile + self.might + self.faith + self.sharp
     }
-    
+
     static func from(string: String) -> Cost {
         string.map { (c) -> Cost in
             switch c {
@@ -86,7 +86,7 @@ struct Cost {
             return Cost.add(a: x, b: y)
         }
     }
-    
+
     func toString() -> String {
         let x = self.colorless > 0 ? "\(self.colorless)" : ""
         let c = self.charm > 0 ? (0...self.charm-1).map({ _ in "C" }).joined() : ""
@@ -100,206 +100,206 @@ struct Cost {
         } else {
             return result
         }
-        
+
     }
-    
+
     func canSubtract(cost: Cost) -> Bool {
-     
+
         let dC = self.charm - cost.charm
         let dG = self.guile - cost.guile
         let dM = self.might - cost.might
         let dF = self.faith - cost.faith
         let dS = self.sharp - cost.sharp
-        
+
         guard dC >= 0 && dG >= 0 && dM >= 0 && dF >= 0 && dS >= 0 else {
             return false
         }
-        
+
         let totalRemainingMana = dC + dG + dM + dF + dS
-        
+
         if totalRemainingMana >= cost.colorless {
             return true
         } else {
             return false
         }
     }
-    
+
 }
-
-
-
-protocol IDescisionMaker {
-    func chooseAction(state: BattleState) -> Promise<PlayerAction>
-    func chooseTarget(state: BattleState, card: Card) -> Promise<IDamagable>
-}
-
-
-
-class Card {
-
-    let uuid: UUID
-    let name: String
-    let cost: Cost
-    let text: String
-    
-    init(uuid: UUID, name: String, cost: Cost, text: String) {
-        self.uuid = uuid
-        self.name = name
-        self.cost = cost
-        self.text = text
-    }
-    
-    func play(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        payForCard(state: state, descision: descision).then { (_) -> Promise<Void> in
-            self.performAffect(state: state, descision: descision)
-        }.then { (_) -> Promise<Void> in
-            self.onPostCardPlayed(state: state, descision: descision)
-        }
-    }
-    
-    func payForCard(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        
-        // Pay for the card
-        state.playerState.currentMana = Cost.add(a: state.playerState.currentMana, b: self.cost.negative())
-         
-        // TODO: We might have multiple ways of paying for a card
-        return Promise<Void>()
-    }
-    
-    func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        return Promise<Void>()
-    }
-    
-    func onPostCardPlayed(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        return discardCard(state: state)
-    }
-    
-    func discardCard(state: BattleState) -> Promise<Void> {
-        state.playerState.discard(card: self)
-        return Promise<Void>()
-    }
-    
-}
-
-
-class CardStrike: Card {
-    
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
-            damagable.applyDamage(damage: 12).asVoid()
-        }
-        return Promise<Void>()
-    }
-    
-    class func newInstance() -> CardStrike {
-        return CardStrike(
-            uuid: UUID(),
-            name: "Strike",
-            cost: Cost.from(string: "M"),
-            text: "Deals 12 damage to a target"
-        )
-    }
-}
-
-class CardCleave: Card {
-    
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        let damagePromises = state.enemies.map { (en) -> Promise<DamageReport> in
-            en.applyDamage(damage: 11)
-        }
-        return when(fulfilled: damagePromises).asVoid()
-    }
-    
-    class func newInstance() -> CardCleave {
-        return CardCleave(
-            uuid: UUID(),
-            name: "Cleave",
-            cost: Cost.from(string: "M"),
-            text: "Deals 11 damage to each enemy"
-        )
-    }
-}
-
-class CardDefend: Card {
-    
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        state.playerState.body.gainBlock(block: 6)
-        return Promise<Void>()
-    }
-
-    class func newInstance() -> CardDefend {
-        return CardDefend(
-            uuid: UUID(),
-            name: "Defend",
-            cost: Cost.from(string: "F"),
-            text: "Gain 6 Block"
-        )
-    }
-}
-
-class CardHeal: Card {
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        state.playerState.body.healHp(heal: 12)
-        return Promise<Void>()
-    }
-    
-    class func newInstance() -> Card {
-        return CardHeal(
-            uuid: UUID(),
-            name: "Heal",
-            cost: Cost.from(string: "F"),
-            text: "Heal for 12"
-        )
-    }
-}
-
-class CardAnger: Card {
-    
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        return descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
-            return damagable.applyDamage(damage: 6).asVoid()
-        }.done { (_) in
-            state.playerState.discard.push(elt: CardAnger.newInstance())
-        }
-    }
-
-    
-    class func newInstance() -> CardAnger {
-        return CardAnger(
-            uuid: UUID(),
-            name: "Anger",
-            cost: Cost.free(),
-            text: "Deals 6 damage to a target. Put a copy of Anger into your discard pile."
-        )
-    }
-}
-
-
-class DummyPlayer: IDescisionMaker {
-    
-    func chooseAction(state: BattleState) -> Promise<PlayerAction> {
-        
-        // Just play the next card you can afford...
-        
-        guard let nextCard = (state.playerState.hand.cards.first { (c) -> Bool in
-            state.playerState.canPlay(card: c)
-        }) else {
-            return Promise<PlayerAction>.value(.pass)
-        }
-        
-        return Promise<PlayerAction>.value(.playCard(nextCard))
-    }
-    
-
-    func chooseTarget(state: BattleState, card: Card) -> Promise<IDamagable> {
-        
-        guard let enemy = state.enemies.randomElement() else {
-            return Promise<IDamagable>.init(error: NSError(domain: "", code: 0, userInfo: nil))
-        }
-        
-        return Promise<IDamagable>.value(enemy)
-    }
-    
-}
-
-
+//
+//
+//
+//protocol IDescisionMaker {
+//    func chooseAction(state: BattleState) -> Promise<PlayerAction>
+//    func chooseTarget(state: BattleState, card: Card) -> Promise<IDamagable>
+//}
+//
+//
+//
+//class Card {
+//
+//    let uuid: UUID
+//    let name: String
+//    let cost: Cost
+//    let text: String
+//
+//    init(uuid: UUID, name: String, cost: Cost, text: String) {
+//        self.uuid = uuid
+//        self.name = name
+//        self.cost = cost
+//        self.text = text
+//    }
+//
+//    func play(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        payForCard(state: state, descision: descision).then { (_) -> Promise<Void> in
+//            self.performAffect(state: state, descision: descision)
+//        }.then { (_) -> Promise<Void> in
+//            self.onPostCardPlayed(state: state, descision: descision)
+//        }
+//    }
+//
+//    func payForCard(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//
+//        // Pay for the card
+//        state.playerState.currentMana = Cost.add(a: state.playerState.currentMana, b: self.cost.negative())
+//
+//        // TODO: We might have multiple ways of paying for a card
+//        return Promise<Void>()
+//    }
+//
+//    func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        return Promise<Void>()
+//    }
+//
+//    func onPostCardPlayed(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        return discardCard(state: state)
+//    }
+//
+//    func discardCard(state: BattleState) -> Promise<Void> {
+//        state.playerState.discard(card: self)
+//        return Promise<Void>()
+//    }
+//
+//}
+//
+//
+//class CardStrike: Card {
+//
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
+//            damagable.applyDamage(damage: 12).asVoid()
+//        }
+//        return Promise<Void>()
+//    }
+//
+//    class func newInstance() -> CardStrike {
+//        return CardStrike(
+//            uuid: UUID(),
+//            name: "Strike",
+//            cost: Cost.from(string: "M"),
+//            text: "Deals 12 damage to a target"
+//        )
+//    }
+//}
+//
+//class CardCleave: Card {
+//
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        let damagePromises = state.enemies.map { (en) -> Promise<DamageReport> in
+//            en.applyDamage(damage: 11)
+//        }
+//        return when(fulfilled: damagePromises).asVoid()
+//    }
+//
+//    class func newInstance() -> CardCleave {
+//        return CardCleave(
+//            uuid: UUID(),
+//            name: "Cleave",
+//            cost: Cost.from(string: "M"),
+//            text: "Deals 11 damage to each enemy"
+//        )
+//    }
+//}
+//
+//class CardDefend: Card {
+//
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        state.playerState.body.gainBlock(block: 6)
+//        return Promise<Void>()
+//    }
+//
+//    class func newInstance() -> CardDefend {
+//        return CardDefend(
+//            uuid: UUID(),
+//            name: "Defend",
+//            cost: Cost.from(string: "F"),
+//            text: "Gain 6 Block"
+//        )
+//    }
+//}
+//
+//class CardHeal: Card {
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        state.playerState.body.healHp(heal: 12)
+//        return Promise<Void>()
+//    }
+//
+//    class func newInstance() -> Card {
+//        return CardHeal(
+//            uuid: UUID(),
+//            name: "Heal",
+//            cost: Cost.from(string: "F"),
+//            text: "Heal for 12"
+//        )
+//    }
+//}
+//
+//class CardAnger: Card {
+//
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        return descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<Void> in
+//            return damagable.applyDamage(damage: 6).asVoid()
+//        }.done { (_) in
+//            state.playerState.discard.push(elt: CardAnger.newInstance())
+//        }
+//    }
+//
+//
+//    class func newInstance() -> CardAnger {
+//        return CardAnger(
+//            uuid: UUID(),
+//            name: "Anger",
+//            cost: Cost.free(),
+//            text: "Deals 6 damage to a target. Put a copy of Anger into your discard pile."
+//        )
+//    }
+//}
+//
+//
+//class DummyPlayer: IDescisionMaker {
+//
+//    func chooseAction(state: BattleState) -> Promise<PlayerAction> {
+//
+//        // Just play the next card you can afford...
+//
+//        guard let nextCard = (state.playerState.hand.cards.first { (c) -> Bool in
+//            state.playerState.canPlay(card: c)
+//        }) else {
+//            return Promise<PlayerAction>.value(.pass)
+//        }
+//
+//        return Promise<PlayerAction>.value(.playCard(nextCard))
+//    }
+//
+//
+//    func chooseTarget(state: BattleState, card: Card) -> Promise<IDamagable> {
+//
+//        guard let enemy = state.enemies.randomElement() else {
+//            return Promise<IDamagable>.init(error: NSError(domain: "", code: 0, userInfo: nil))
+//        }
+//
+//        return Promise<IDamagable>.value(enemy)
+//    }
+//
+//}
+//
+//

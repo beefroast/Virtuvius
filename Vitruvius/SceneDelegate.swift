@@ -28,8 +28,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let handler = EventHandler(eventStack: Stack<Event>(), effectList: [])
         
-        let dummy = DummyTarget(name: "Player")
-        let enemy = DummyTarget(name: "Goomba")
+        let dummy = Actor(
+            uuid: UUID(),
+            name: "Player",
+            body: Body(block: 0, hp: 20, maxHp: 20),
+            cardZones: CardZones(
+                hand: Hand(),
+                drawPile: DrawPile(cards: []),
+                discard: DiscardPile()
+            )
+        )
+        
+        let enemy = Actor(
+            uuid: UUID(),
+            name: "Enemy",
+            body: Body(block: 0, hp: 20, maxHp: 20),
+            cardZones: CardZones(
+                hand: Hand(),
+                drawPile: DrawPile(cards: []),
+                discard: DiscardPile()
+            )
+        )
+            
         
         handler.push(event: Event.playCard(CardEvent.init(source: enemy, card: EventStrikeCard(), target: dummy)))
         
@@ -135,56 +155,56 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 
-class GameSimulator {
-    
-    
-    func simulateGame() -> Promise<BattleOutcome> {
-        
-        let state = PlayerState(withCards: [
-            CardStrike.newInstance(),
-            CardStrike.newInstance(),
-            CardStrike.newInstance(),
-            CardDrain.newInstance(),
-            CardMistForm.newInstance(),
-            CardDefend.newInstance(),
-            CardDefend.newInstance(),
-            CardDefend.newInstance(),
-        ])
-        
-        let battleState = BattleState(player: DummyPlayer(), playerState: state, enemies: [
-            EnemyGoomba.newInstance(),
-            EnemyGoomba.newInstance(),
-            EnemyGoomba.newInstance(),
-        ])
-        
-        battleState.playerState.drawCardsIntoHand()
-        battleState.playerState.onTurnBegins()
-        
-        return tick(battleState: battleState)
-    }
-    
-    func tick(battleState: BattleState) -> Promise<BattleOutcome> {
-        
-        return battleState.tick().then { (outcome) -> Promise<BattleOutcome> in
-            
-            print(battleState.description)
-            
-            switch outcome {
-            case .defeat:
-                print("PLAYER DEFEATED!")
-                return Promise<BattleOutcome>.value(outcome)
-                
-            case .victory:
-                print("PLAYER VICTORIOUS")
-                return Promise<BattleOutcome>.value(outcome)
-                
-            case .ongoing:
-                return self.tick(battleState: battleState)
-            }
-            
-            
-        }
-        
-    }
-    
-}
+//class GameSimulator {
+//
+//
+//    func simulateGame() -> Promise<BattleOutcome> {
+//
+//        let state = PlayerState(withCards: [
+//            CardStrike.newInstance(),
+//            CardStrike.newInstance(),
+//            CardStrike.newInstance(),
+//            CardDrain.newInstance(),
+//            CardMistForm.newInstance(),
+//            CardDefend.newInstance(),
+//            CardDefend.newInstance(),
+//            CardDefend.newInstance(),
+//        ])
+//
+//        let battleState = BattleState(player: DummyPlayer(), playerState: state, enemies: [
+//            EnemyGoomba.newInstance(),
+//            EnemyGoomba.newInstance(),
+//            EnemyGoomba.newInstance(),
+//        ])
+//
+//        battleState.playerState.drawCardsIntoHand()
+//        battleState.playerState.onTurnBegins()
+//
+//        return tick(battleState: battleState)
+//    }
+//
+//    func tick(battleState: BattleState) -> Promise<BattleOutcome> {
+//
+//        return battleState.tick().then { (outcome) -> Promise<BattleOutcome> in
+//
+//            print(battleState.description)
+//
+//            switch outcome {
+//            case .defeat:
+//                print("PLAYER DEFEATED!")
+//                return Promise<BattleOutcome>.value(outcome)
+//
+//            case .victory:
+//                print("PLAYER VICTORIOUS")
+//                return Promise<BattleOutcome>.value(outcome)
+//
+//            case .ongoing:
+//                return self.tick(battleState: battleState)
+//            }
+//
+//
+//        }
+//
+//    }
+//
+//}

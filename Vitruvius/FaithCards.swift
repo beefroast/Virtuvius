@@ -9,22 +9,22 @@
 import Foundation
 import PromiseKit
 
-class CardDrain: Card {
-    
-    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<DamageReport> in
-            damagable.applyDamage(damage: 6)
-        }.done { (report) in
-            state.playerState.healHp(heal: report.unblockedDamageDealt)
-        }
-    }
-    
-    static func newInstance() -> Card {
-        return CardDrain(
-            uuid: UUID(),
-            name: "Drain",
-            cost: Cost.free(),
-            text: "Drains an opponent for 6"
-        )
-    }
-}
+//class CardDrain: Card {
+//    
+//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
+//        descision.chooseTarget(state: state, card: self).then { (damagable) -> Promise<DamageReport> in
+//            damagable.applyDamage(damage: 6)
+//        }.done { (report) in
+//            state.playerState.healHp(heal: report.unblockedDamageDealt)
+//        }
+//    }
+//    
+//    static func newInstance() -> Card {
+//        return CardDrain(
+//            uuid: UUID(),
+//            name: "Drain",
+//            cost: Cost.free(),
+//            text: "Drains an opponent for 6"
+//        )
+//    }
+//}

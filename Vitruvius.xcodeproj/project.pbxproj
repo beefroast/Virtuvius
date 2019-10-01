@@ -20,10 +20,13 @@
 		640922B9233E0B74005C2EB7 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922B8233E0B74005C2EB7 /* Card.swift */; };
 		640922BB233E10CA005C2EB7 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922BA233E10CA005C2EB7 /* Stack.swift */; };
 		640922BD233F0501005C2EB7 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640922BC233F0501005C2EB7 /* PlayerState.swift */; };
+		6434F2B62343259E0040C892 /* IBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2B52343259E0040C892 /* IBody.swift */; };
+		6434F2B9234327BF0040C892 /* ICardPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2B8234327BF0040C892 /* ICardPlayer.swift */; };
+		6434F2BB2343282F0040C892 /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2BA2343282F0040C892 /* Actor.swift */; };
+		6434F2BF2343288B0040C892 /* ICard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2BE2343288B0040C892 /* ICard.swift */; };
 		6472428F233F0F3D006BB6A3 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6472428E233F0F3D006BB6A3 /* Enemy.swift */; };
 		64724293233F870F006BB6A3 /* CharmCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724292233F870F006BB6A3 /* CharmCards.swift */; };
 		64724295234056D8006BB6A3 /* FaithCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724294234056D8006BB6A3 /* FaithCards.swift */; };
-		6472429723405D22006BB6A3 /* IDamagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6472429623405D22006BB6A3 /* IDamagable.swift */; };
 		64724299234064B6006BB6A3 /* MightCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724298234064B6006BB6A3 /* MightCards.swift */; };
 		6472429B234067F6006BB6A3 /* GuileCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6472429A234067F6006BB6A3 /* GuileCards.swift */; };
 		64C2B4AC233F07440051041C /* BattleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C2B4AB233F07440051041C /* BattleState.swift */; };
@@ -71,10 +74,13 @@
 		640922B8233E0B74005C2EB7 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		640922BA233E10CA005C2EB7 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		640922BC233F0501005C2EB7 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
+		6434F2B52343259E0040C892 /* IBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBody.swift; sourceTree = "<group>"; };
+		6434F2B8234327BF0040C892 /* ICardPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICardPlayer.swift; sourceTree = "<group>"; };
+		6434F2BA2343282F0040C892 /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
+		6434F2BE2343288B0040C892 /* ICard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICard.swift; sourceTree = "<group>"; };
 		6472428E233F0F3D006BB6A3 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		64724292233F870F006BB6A3 /* CharmCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharmCards.swift; sourceTree = "<group>"; };
 		64724294234056D8006BB6A3 /* FaithCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaithCards.swift; sourceTree = "<group>"; };
-		6472429623405D22006BB6A3 /* IDamagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDamagable.swift; sourceTree = "<group>"; };
 		64724298234064B6006BB6A3 /* MightCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MightCards.swift; sourceTree = "<group>"; };
 		6472429A234067F6006BB6A3 /* GuileCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuileCards.swift; sourceTree = "<group>"; };
 		64C2B4AB233F07440051041C /* BattleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleState.swift; sourceTree = "<group>"; };
@@ -148,6 +154,7 @@
 		64092287233E0B45005C2EB7 /* Vitruvius */ = {
 			isa = PBXGroup;
 			children = (
+				6434F2BD2343287B0040C892 /* Card */,
 				64C7600E234079EB00AE61DB /* AffectAndTrigger */,
 				64092288233E0B45005C2EB7 /* AppDelegate.swift */,
 				6409228A233E0B45005C2EB7 /* SceneDelegate.swift */,
@@ -164,7 +171,7 @@
 				6472429A234067F6006BB6A3 /* GuileCards.swift */,
 				640922BC233F0501005C2EB7 /* PlayerState.swift */,
 				64C2B4AB233F07440051041C /* BattleState.swift */,
-				6472429623405D22006BB6A3 /* IDamagable.swift */,
+				6434F2B72343279D0040C892 /* ActorState */,
 				64724298234064B6006BB6A3 /* MightCards.swift */,
 			);
 			path = Vitruvius;
@@ -194,6 +201,24 @@
 				640922AC233E0B48005C2EB7 /* Info.plist */,
 			);
 			path = VitruviusUITests;
+			sourceTree = "<group>";
+		};
+		6434F2B72343279D0040C892 /* ActorState */ = {
+			isa = PBXGroup;
+			children = (
+				6434F2B52343259E0040C892 /* IBody.swift */,
+				6434F2B8234327BF0040C892 /* ICardPlayer.swift */,
+				6434F2BA2343282F0040C892 /* Actor.swift */,
+			);
+			path = ActorState;
+			sourceTree = "<group>";
+		};
+		6434F2BD2343287B0040C892 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				6434F2BE2343288B0040C892 /* ICard.swift */,
+			);
+			path = Card;
 			sourceTree = "<group>";
 		};
 		64C7600E234079EB00AE61DB /* AffectAndTrigger */ = {
@@ -446,10 +471,12 @@
 				64C2B4AC233F07440051041C /* BattleState.swift in Sources */,
 				64092289233E0B45005C2EB7 /* AppDelegate.swift in Sources */,
 				6472429B234067F6006BB6A3 /* GuileCards.swift in Sources */,
+				6434F2B62343259E0040C892 /* IBody.swift in Sources */,
 				64724295234056D8006BB6A3 /* FaithCards.swift in Sources */,
-				6472429723405D22006BB6A3 /* IDamagable.swift in Sources */,
 				640922BB233E10CA005C2EB7 /* Stack.swift in Sources */,
 				64724299234064B6006BB6A3 /* MightCards.swift in Sources */,
+				6434F2BF2343288B0040C892 /* ICard.swift in Sources */,
+				6434F2B9234327BF0040C892 /* ICardPlayer.swift in Sources */,
 				64724293233F870F006BB6A3 /* CharmCards.swift in Sources */,
 				6409228B233E0B45005C2EB7 /* SceneDelegate.swift in Sources */,
 				64C76010234079FF00AE61DB /* EventHandler.swift in Sources */,
@@ -457,6 +484,7 @@
 				6409228D233E0B45005C2EB7 /* ContentView.swift in Sources */,
 				640922BD233F0501005C2EB7 /* PlayerState.swift in Sources */,
 				640922B9233E0B74005C2EB7 /* Card.swift in Sources */,
+				6434F2BB2343282F0040C892 /* Actor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
