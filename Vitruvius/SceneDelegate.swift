@@ -25,25 +25,45 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         
+        let handler = EventHandler(eventStack: Stack<Event>(), effectList: [])
         
+        let dummy = DummyTarget(name: "Player")
         
-        let game = GameSimulator()
+        handler.push(
+            event: Event.playCard(
+                CardEvent.init(source: dummy, card: EventStrikeCard())
+            )
+        )
         
-        game.simulateGame().done { (outcome) in
-            print("yay")
+        print("Beginning")
+        
+        var performNext: Bool = true
+        while performNext {
+            performNext = handler.popAndHandle()
         }
         
+        print("Ending")
         
-        // Test some costs
-        let testCosts = ["0", "1", "8", "G", "3GGG", "GM", "8GM", "2CGMFS"]
         
-        let results = testCosts.map { (s) -> (String, Cost) in
-            return (s, Cost.from(string: s))
-        }.map { (tuple) -> String in
-            return "\(tuple.0) -> \(tuple.1.toString())"
-        }.joined(separator: "\n")
         
-        print(results)
+        
+//        let game = GameSimulator()
+//
+//        game.simulateGame().done { (outcome) in
+//            print("yay")
+//        }
+//
+//
+//        // Test some costs
+//        let testCosts = ["0", "1", "8", "G", "3GGG", "GM", "8GM", "2CGMFS"]
+//
+//        let results = testCosts.map { (s) -> (String, Cost) in
+//            return (s, Cost.from(string: s))
+//        }.map { (tuple) -> String in
+//            return "\(tuple.0) -> \(tuple.1.toString())"
+//        }.joined(separator: "\n")
+//
+//        print(results)
         
         
         

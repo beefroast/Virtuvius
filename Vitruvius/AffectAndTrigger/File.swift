@@ -10,16 +10,22 @@ import Foundation
 
 
 protocol IPlayer {
+    var name: String { get }
     var body: IBody { get set }
     func drawCard() -> Void
 }
 
 class DummyTarget: IPlayer {
+    let name: String
+    init(name: String) {
+        self.name = name
+    }
     func drawCard() -> Void {}
     var body: IBody = DamagableBody(hp: 20, maxHp: 20, currentBlock: 4)
 }
 
 protocol ICard {
+    var name: String { get }
     func resolve(source: IPlayer, handler: EventHandler) -> Void
 }
 
@@ -74,10 +80,10 @@ class AttackEvent {
 }
 
 class UpdateBodyEvent {
-    var body: IBody
+    var player: IPlayer
     var amount: Int
-    init(body: IBody, amount: Int) {
-        self.body = body
+    init(player: IPlayer, amount: Int) {
+        self.player = player
         self.amount = amount
     }
 }
@@ -97,9 +103,10 @@ class EventHandler {
         eventStack.push(elt: event)
     }
     
-    func popAndHandle() -> Void {
-        guard let e = eventStack.pop() else { return }
+    func popAndHandle() -> Bool {
+        guard let e = eventStack.pop() else { return false }
         self.handle(event: e)
+        return self.eventStack.isEmpty == false
     }
     
     func handle(event: Event) -> Void {
@@ -122,25 +129,25 @@ class EventHandler {
             
         
         case .willLoseHp(let bodyEvent):
-            bodyEvent.body.loseHp(damage: bodyEvent.amount)
+            bodyEvent.player.body.loseHp(damage: bodyEvent.amount)
             self.push(event: Event.didLoseHp(bodyEvent))
             
         case .willLoseBlock(let bodyEvent):
-            bodyEvent.body.loseBlock(block: bodyEvent.amount)
+            bodyEvent.player.body.loseBlock(block: bodyEvent.amount)
             self.push(event: Event.didLoseBlock(bodyEvent))
             
         case .didLoseHp(let bodyEvent):
-            break
+            print("\(bodyEvent.player.name) lost \(bodyEvent.amount) hp")
             
         case .didLoseBlock(let bodyEvent):
-            break
+            print("\(bodyEvent.player.name) lost \(bodyEvent.amount) block")
             
         case .willGainHp(let bodyEvent):
-            bodyEvent.body.healHp(heal: bodyEvent.amount)
+            bodyEvent.player.body.healHp(heal: bodyEvent.amount)
             self.push(event: Event.didGainHp(bodyEvent))
             
         case .willGainBlock(let bodyEvent):
-            bodyEvent.body.gainBlock(block: bodyEvent.amount)
+            bodyEvent.player.body.gainBlock(block: bodyEvent.amount)
             self.push(event: Event.didGainBlock(bodyEvent))
             
         case .didGainHp(let bodyEvent):
@@ -149,12 +156,15 @@ class EventHandler {
         case .didGainBlock(let bodyEvent):
             break
             
-            
         case .playCard(let cardEvent):
+            print("\(cardEvent.source.name) played \(cardEvent.card.name)")
             cardEvent.card.resolve(source: cardEvent.source, handler: self)
             
         case .attack(let attackEvent):
+            
             attackEvent.targets.forEach { (target) in
+                
+                print("\(attackEvent.source.name) attacked \(attackEvent.source.name) for \(attackEvent.amount)")
                 
                 // Send the event to reduce the block
                 
@@ -165,14 +175,14 @@ class EventHandler {
                 if damageRemaining > 0 {
                     self.eventStack.push(elt:
                         Event.willLoseHp(
-                            UpdateBodyEvent(body: target.body, amount: damageRemaining)
+                            UpdateBodyEvent(player: target, amount: damageRemaining)
                         )
                     )
                 }
                 
                 self.eventStack.push(elt:
                     Event.willLoseBlock(
-                        UpdateBodyEvent(body: target.body, amount: blockLost)
+                        UpdateBodyEvent(player: target, amount: blockLost)
                     )
                 )
             }
@@ -183,13 +193,15 @@ class EventHandler {
 
 class EventStrikeCard: ICard {
     
+    let name =  "Strike"
+    
     func resolve(source: IPlayer, handler: EventHandler) {
         // TODO: Choose a target to attack
         handler.push(
             event: Event.attack(
                 AttackEvent(
                     source: source,
-                    targets: [DummyTarget()],
+                    targets: [DummyTarget(name: "Dummy")],
                     amount: 6
                 )
             )
