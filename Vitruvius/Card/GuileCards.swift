@@ -27,6 +27,9 @@ class CardMistForm: ICard {
         )
     }
     
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
+    
     class MistFormEffect: IEffect {
         
         let owner: Actor

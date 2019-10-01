@@ -36,6 +36,7 @@ class Stack<T> {
         return count == 0
     }
     
+    
     func getCount() -> Int {
         return count
     }
@@ -48,6 +49,7 @@ class Stack<T> {
     func pop() -> T? {
         let top = self.elt?.element
         self.elt = self.elt?.next
+        self.count = self.count - 1
         return top
     }
     

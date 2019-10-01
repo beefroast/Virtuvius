@@ -23,8 +23,12 @@ enum Event {
     case onTurnBegan(PlayerEvent)
     case onTurnEnded(PlayerEvent)
     
+    case willDrawCards(DrawCardsEvent)
     case drawCard(PlayerEvent)
     case discardCard(DiscardCardEvent)
+    case discardHand(PlayerEvent)
+    case onCardDrawn(CardDrawnEvent)
+    case shuffleDiscardIntoDrawPile(PlayerEvent)
         
     case willLoseHp(UpdateBodyEvent)
     case willLoseBlock(UpdateBodyEvent)
@@ -55,6 +59,24 @@ class PlayerEvent {
     var actor: Actor
     init(actor: Actor) {
         self.actor = actor
+    }
+}
+
+class DrawCardsEvent {
+    var actor: Actor
+    var amount: Int
+    init(actor: Actor, amount: Int) {
+        self.actor = actor
+        self.amount = amount
+    }
+}
+
+class CardDrawnEvent {
+    var actor: Actor
+    var card: ICard
+    init(actor: Actor, card: ICard) {
+        self.actor = actor
+        self.card = card
     }
 }
 
@@ -108,6 +130,7 @@ class UpdateBodyEvent {
 
 class EventHandler {
     
+    let handlerUuid: UUID = UUID()
     var eventStack: Stack<Event>
     var effectList: [IEffect]
     
@@ -120,10 +143,18 @@ class EventHandler {
         eventStack.push(elt: event)
     }
     
+    func flushEvents() -> Void {
+        var hasEvents = !self.eventStack.isEmpty
+        while hasEvents {
+            _ = self.popAndHandle()
+            hasEvents = !self.eventStack.isEmpty
+        }
+    }
+    
     func popAndHandle() -> Bool {
         guard let e = eventStack.pop() else { return false }
         self.handle(event: e)
-        return self.eventStack.isEmpty == false
+        return !self.eventStack.isEmpty
     }
     
     func handle(event: Event) -> Void {
@@ -135,24 +166,93 @@ class EventHandler {
     
         switch event {
         
-        case .onTurnBegan(let player):
-            break
+        case .onTurnBegan(let event):
+            
+            print("\n\(event.actor.name) turn began.")
+            
+            // Lose all your block
+            // TODO: We might want to lose less block here
+            
+            self.push(
+                event: Event.willLoseBlock(
+                    UpdateBodyEvent(player: event.actor, sourceUuid: handlerUuid, amount: event.actor.body.block)
+                )
+            )
         
-        case .onTurnEnded(let player):
-            break
+        case .onTurnEnded(let event):
+            
+            print("\n\(event.actor.name) turn ended.")
+            
+            // Discard hand then draw 5 cards
+            // TODO: Make this a variable amount
+            
+            self.push(event: Event.willDrawCards(DrawCardsEvent(actor: event.actor, amount: 5)))
+            self.push(event: Event.discardHand(PlayerEvent(actor: event.actor)))
         
         case .drawCard(let event):
-            // TODO: Draw cards
-            break
             
+            print("\(event.actor.name) draws card.")
+            
+            guard event.actor.cardZones.drawPile.hasDraw() else {
+                guard event.actor.cardZones.discard.isEmpty == false else {
+                    // Cannot draw a card or reshuffle so do nothing instead
+                    return
+                }
+                
+                // Reshuffle and then draw again
+                self.push(event: Event.drawCard(event))
+                self.push(event: Event.shuffleDiscardIntoDrawPile(event))
+                return
+            }
+            
+            // Draw a card
+            guard let card = event.actor.cardZones.drawPile.drawRandom() else {
+                return
+            }
+            
+            event.actor.cardZones.hand.cards.append(card)
+            self.push(event: Event.onCardDrawn(CardDrawnEvent(actor: event.actor, card: card)))
             
         case .discardCard(let event):
+            
             event.actor.cardZones.hand.cards.removeAll { (card) -> Bool in
                 card.uuid == event.card.uuid
             }
-            print("\(event.actor.name) discarded \(event.card.name)")
-
+            event.actor.cardZones.discard.push(elt: event.card)
+            
+            print("\(event.actor.name) discarded \(event.card.name).")
         
+        case .discardHand(let event):
+            
+            print("\(event.actor.name) discards their hand.")
+            
+            for card in event.actor.cardZones.hand.cards {
+                self.push(event: Event.discardCard(DiscardCardEvent.init(actor: event.actor, card: card)))
+            }
+            
+        case .willDrawCards(let drawCardsEvent):
+            
+            print("\(drawCardsEvent.actor.name) will draw \(drawCardsEvent.amount) cards.")
+            
+            // Enqueue a draw for each in amount
+            guard drawCardsEvent.amount > 0 else { return }
+            for _ in 0...drawCardsEvent.amount-1 {
+                self.push(event: Event.drawCard(PlayerEvent(actor: drawCardsEvent.actor)))
+            }
+            
+        case .onCardDrawn(let event):
+            
+            print("\(event.actor.name) drew \(event.card.name).")
+            
+            event.card.onDrawn(source: event.actor, handler: self)
+            
+        case .shuffleDiscardIntoDrawPile(let event):
+            
+            print("\(event.actor.name) shuffles their discard into their draw pile.")
+            
+            let discardedCards = event.actor.cardZones.discard.asArray()
+            event.actor.cardZones.drawPile.shuffleIn(cards: discardedCards)
+            
         case .willLoseHp(let bodyEvent):
             // Calculate the amount of lost HP
             let remainingHp = max(bodyEvent.player.body.hp - bodyEvent.amount, 0)
@@ -201,7 +301,7 @@ class EventHandler {
             print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
         case .playCard(let cardEvent):
-            print("\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
+            print("\n\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
             cardEvent.card.resolve(source: cardEvent.cardOwner, handler: self, target: cardEvent.target)
             
         case .attack(let attackEvent):
@@ -232,7 +332,6 @@ class EventHandler {
             }
         }
     }
-    
 }
 
 class EventStrikeCard: ICard {
@@ -261,6 +360,9 @@ class EventStrikeCard: ICard {
             )
         )
     }
+    
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
 }
 
 
@@ -276,6 +378,9 @@ class EventDefendCard: ICard {
         handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
         handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, sourceUuid: self.uuid, amount: 5)))
     }
+    
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
 }
 
 
@@ -290,6 +395,9 @@ class EventDoubleDamageCard: ICard {
         handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
         handler.effectList.append(DoubleDamageTrigger(source: source))
     }
+    
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
     
     class DoubleDamageTrigger: IEffect {
         
@@ -313,6 +421,7 @@ class EventDoubleDamageCard: ICard {
             }
         }
     }
+    
 }
 
 class EventSandwichCard: ICard {
@@ -326,6 +435,9 @@ class EventSandwichCard: ICard {
         handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
         handler.effectList.append(SandwichTrigger(source: source))
     }
+    
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
     
     class SandwichTrigger: IEffect {
         

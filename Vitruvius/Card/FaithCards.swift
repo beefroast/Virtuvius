@@ -46,6 +46,9 @@ class CardDrain: ICard {
         )
     }
     
+    func onDrawn(source: Actor, handler: EventHandler) {}
+    func onDiscarded(source: Actor, handler: EventHandler) {}
+    
     class DrainEffect: IEffect {
         
         let owner: Actor

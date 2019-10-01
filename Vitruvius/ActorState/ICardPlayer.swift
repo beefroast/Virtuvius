@@ -49,24 +49,16 @@ class DrawPile {
         self.draws = self.randomPool.map({ _ in return .random })
     }
     
-    func drawACard(discardPile: DiscardPile) -> ICard? {
-        
-        guard draws.count > 0 else {
-            
-            // Shuffle the discard pile into the draw pile
-            self.randomPool = discardPile.asArray()
-            
-            // If there's no cards to draw after the discard pile has
-            // been shuffled in, don't do anything
-            if self.randomPool.count == 0 {
-                return nil
-            }
-            
-            // Set the draws up with a bunch of random draws
-            self.draws = self.randomPool.map({ _ in return .random })
-            
-            return self.drawACard(discardPile: discardPile)
-        }
+    func hasDraw() -> Bool {
+        return draws.count > 0
+    }
+    
+    func shuffleIn(cards: [ICard]) {
+        self.randomPool += cards
+        self.draws = self.randomPool.map({ _ in return .random })
+    }
+    
+    func drawRandom() -> ICard? {
         
         let draw = self.draws.remove(at: 0)
         
@@ -80,6 +72,7 @@ class DrawPile {
             return self.randomPool.remove(at: i)
         }
     }
+
 
 }
 

@@ -33,8 +33,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             name: "Player",
             body: Body(block: 0, hp: 10, maxHp: 20),
             cardZones: CardZones(
-                hand: Hand(),
-                drawPile: DrawPile(cards: []),
+                hand: Hand(cards: [
+                    EventStrikeCard(),
+                    EventDefendCard(),
+                    EventStrikeCard(),
+                    EventDefendCard(),
+                    EventStrikeCard(),
+                ]),
+                drawPile: DrawPile(cards: [
+                    EventDefendCard(),
+                    EventStrikeCard(),
+                    EventDefendCard(),
+                    EventStrikeCard(),
+                    EventDefendCard(),
+                ]),
                 discard: DiscardPile()
             )
         )
@@ -49,51 +61,101 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 discard: DiscardPile()
             )
         )
-            
         
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventStrikeCard(), target: dummy)))
+        print("=== STARTING SIMULATION ===")
         
-        handler.push(
-            event: Event.playCard(
-                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
-            )
-        )
-        
-        handler.push(
-            event: Event.playCard(
-                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
-            )
-        )
-        
-        handler.push(
-            event: Event.playCard(
-                CardEvent.init(cardOwner: dummy, card: EventSandwichCard())
-            )
-        )
-        
-        
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: EventDefendCard())))
-        
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventDefendCard())))
-        
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
-
-        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: CardMistForm())))
-        
-        
-        print("Beginning")
-        
-        var performNext: Bool = true
-        while performNext {
-            performNext = handler.popAndHandle()
+        var nextCard = dummy.cardZones.hand.cards.first
+        while nextCard != nil {
+            handler.push(event: Event.playCard(
+                CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
+            ))
+            handler.flushEvents()
+            nextCard = dummy.cardZones.hand.cards.first
         }
         
+        handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
         
+        handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
         
+        nextCard = dummy.cardZones.hand.cards.first
+        while nextCard != nil {
+            handler.push(event: Event.playCard(
+                CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
+            ))
+            handler.flushEvents()
+            nextCard = dummy.cardZones.hand.cards.first
+        }
         
-        print("Ending")
+        handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
+        
+        handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
+        
+        nextCard = dummy.cardZones.hand.cards.first
+        while nextCard != nil {
+            handler.push(event: Event.playCard(
+                CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
+            ))
+            handler.flushEvents()
+            nextCard = dummy.cardZones.hand.cards.first
+        }
+        
+        handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
+        
+        handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
+        handler.flushEvents()
+        
+        print("=== SIMULATION ENDED ===")
+        
+            
+//
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventStrikeCard(), target: dummy)))
+//
+//        handler.push(
+//            event: Event.playCard(
+//                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
+//            )
+//        )
+//
+//        handler.push(
+//            event: Event.playCard(
+//                CardEvent.init(cardOwner: dummy, card: EventStrikeCard(), target: enemy)
+//            )
+//        )
+//
+//        handler.push(
+//            event: Event.playCard(
+//                CardEvent.init(cardOwner: dummy, card: EventSandwichCard())
+//            )
+//        )
+//
+//
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: EventDefendCard())))
+//
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: EventDefendCard())))
+//
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: dummy, card: CardDrain(), target: enemy)))
+//
+//        handler.push(event: Event.playCard(CardEvent.init(cardOwner: enemy, card: CardMistForm())))
+        
+//
+//        print("Beginning")
+//
+//        var performNext: Bool = true
+//        while performNext {
+//            performNext = handler.popAndHandle()
+//        }
+//
+//
+//
+//
+//        print("Ending")
         
         
         

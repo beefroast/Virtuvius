@@ -14,5 +14,10 @@ protocol ICard {
     var name: String { get }
     var requiresSingleTarget: Bool { get }
     var cost: Int { get set }
+    
     func resolve(source: Actor, handler: EventHandler, target: Actor?) -> Void
+    func onDrawn(source: Actor, handler: EventHandler) -> Void
+    func onDiscarded(source: Actor, handler: EventHandler) -> Void
 }
+
+
