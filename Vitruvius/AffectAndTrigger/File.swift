@@ -164,7 +164,7 @@ class EventHandler {
             
             attackEvent.targets.forEach { (target) in
                 
-                print("\(attackEvent.source.name) attacked \(attackEvent.source.name) for \(attackEvent.amount)")
+                print("\(attackEvent.source.name) attacked \(attackEvent.targets.first?.name) for \(attackEvent.amount)")
                 
                 // Send the event to reduce the block
                 
@@ -206,6 +206,37 @@ class EventStrikeCard: ICard {
                 )
             )
         )
+    }
+    
+}
+
+class EventDoubleDamageCard: ICard {
+    
+    let name = "Double Damage"
+    
+    func resolve(source: IPlayer, handler: EventHandler) {
+        handler.effectList.append(DoubleDamageTrigger(source: source))
+    }
+    
+    class DoubleDamageTrigger: IEffect {
+        
+        let source: IPlayer
+        
+        init(source: IPlayer) {
+            self.source = source
+        }
+        
+        func handle(event: Event, handler: EventHandler) -> Bool {
+            switch event {
+                
+            case .attack(let event):
+                event.amount = 2 * event.amount
+                return true
+                
+            default:
+                return false
+            }
+        }
     }
     
 }
