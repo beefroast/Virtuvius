@@ -94,7 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             var nextCard = dummy.cardZones.hand.cards.first
         
-            while nextCard != nil {
+            while nextCard != nil && target != nil {
                 handler.push(event: Event.playCard(
                     CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: target)
                 ))
@@ -104,13 +104,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 nextCard = dummy.cardZones.hand.cards.first
             }
             
-            handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
-            handler.flushEvents(battleState: battleState)
+            if target != nil {
+                handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
+                handler.flushEvents(battleState: battleState)
+            }
             
             target = battleState.enemies.first
         }
         
-        print("done")
+        print("\nSimulation Done!")
         
             
 //
