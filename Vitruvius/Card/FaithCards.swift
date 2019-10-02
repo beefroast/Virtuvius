@@ -10,23 +10,25 @@ import Foundation
 import PromiseKit
 
 class CardDrain: ICard {
+
+    
     
     var uuid: UUID = UUID()
     var name: String = "Drain"
     var requiresSingleTarget: Bool = true
     var cost: Int = 1
     
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
-    
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
+
         guard let target = target else {
             return
         }
         
         // Push the discard effect
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
         
         // Push the gain off of damage effect
-        handler.effectList.append(
+        battleState.eventHandler.effectList.append(
             DrainEffect(
                 owner: source,
                 sourceUuid: self.uuid
@@ -34,7 +36,7 @@ class CardDrain: ICard {
         )
         
         // Push the attack
-        handler.push(
+        battleState.eventHandler.push(
             event: Event.attack(
                 AttackEvent(
                     sourceUuid: self.uuid,
@@ -46,8 +48,13 @@ class CardDrain: ICard {
         )
     }
     
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
+
+    
+    func onDrawn(source: Actor, battleState: BattleState) {
+    }
+    
+    func onDiscarded(source: Actor, battleState: BattleState) {
+    }
     
     class DrainEffect: IEffect {
         

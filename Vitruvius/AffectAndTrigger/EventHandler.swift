@@ -143,21 +143,21 @@ class EventHandler {
         eventStack.push(elt: event)
     }
     
-    func flushEvents() -> Void {
+    func flushEvents(battleState: BattleState) -> Void {
         var hasEvents = !self.eventStack.isEmpty
         while hasEvents {
-            _ = self.popAndHandle()
+            _ = self.popAndHandle(battleState: battleState)
             hasEvents = !self.eventStack.isEmpty
         }
     }
     
-    func popAndHandle() -> Bool {
+    func popAndHandle(battleState: BattleState) -> Bool {
         guard let e = eventStack.pop() else { return false }
-        self.handle(event: e)
+        self.handle(event: e, battleState: battleState)
         return !self.eventStack.isEmpty
     }
     
-    func handle(event: Event) -> Void {
+    func handle(event: Event, battleState: BattleState) -> Void {
         
         // Loop through the effect list
         self.effectList.removeAll { (effect) -> Bool in
@@ -244,7 +244,7 @@ class EventHandler {
             
             print("\(event.actor.name) drew \(event.card.name).")
             
-            event.card.onDrawn(source: event.actor, handler: self)
+            event.card.onDrawn(source: event.actor, battleState: battleState)
             
         case .shuffleDiscardIntoDrawPile(let event):
             
@@ -302,7 +302,7 @@ class EventHandler {
             
         case .playCard(let cardEvent):
             print("\n\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
-            cardEvent.card.resolve(source: cardEvent.cardOwner, handler: self, target: cardEvent.target)
+            cardEvent.card.resolve(source: cardEvent.cardOwner, battleState: battleState, target: cardEvent.target)
             
         case .attack(let attackEvent):
             
@@ -334,54 +334,7 @@ class EventHandler {
     }
 }
 
-class EventStrikeCard: ICard {
-    
-    let uuid: UUID = UUID()
-    let name =  "Strike"
-    let requiresSingleTarget: Bool = true
-    var cost: Int = 1
-    
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
-        
-        guard let target = target else {
-            return
-        }
-        
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        
-        handler.push(
-            event: Event.attack(
-                AttackEvent(
-                    sourceUuid: self.uuid,
-                    sourceOwner: source,
-                    targets: [target],
-                    amount: 6
-                )
-            )
-        )
-    }
-    
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
-}
 
-
-
-class EventDefendCard: ICard {
-    
-    let uuid: UUID = UUID()
-    let name =  "Defend"
-    let requiresSingleTarget: Bool = false
-    var cost: Int = 1
-    
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        handler.push(event: Event.willGainBlock(UpdateBodyEvent(player: source, sourceUuid: self.uuid, amount: 5)))
-    }
-    
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
-}
 
 
 class EventDoubleDamageCard: ICard {
@@ -391,13 +344,13 @@ class EventDoubleDamageCard: ICard {
     let requiresSingleTarget: Bool = false
     var cost: Int = 1
     
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        handler.effectList.append(DoubleDamageTrigger(source: source))
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
+        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        battleState.eventHandler.effectList.append(DoubleDamageTrigger(source: source))
     }
     
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
+    func onDrawn(source: Actor, battleState: BattleState) {}
+    func onDiscarded(source: Actor, battleState: BattleState) {}
     
     class DoubleDamageTrigger: IEffect {
         
@@ -431,13 +384,13 @@ class EventSandwichCard: ICard {
     let requiresSingleTarget: Bool = false
     var cost: Int = 1
     
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        handler.effectList.append(SandwichTrigger(source: source))
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
+        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        battleState.eventHandler.effectList.append(SandwichTrigger(source: source))
     }
     
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
+    func onDrawn(source: Actor, battleState: BattleState) {}
+    func onDiscarded(source: Actor, battleState: BattleState) {}
     
     class SandwichTrigger: IEffect {
         

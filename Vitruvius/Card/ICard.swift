@@ -9,15 +9,18 @@
 import Foundation
 
 
+
+
 protocol ICard {
+    
     var uuid: UUID { get }
     var name: String { get }
     var requiresSingleTarget: Bool { get }
     var cost: Int { get set }
     
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) -> Void
-    func onDrawn(source: Actor, handler: EventHandler) -> Void
-    func onDiscarded(source: Actor, handler: EventHandler) -> Void
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) -> Void
+    func onDrawn(source: Actor, battleState: BattleState) -> Void
+    func onDiscarded(source: Actor, battleState: BattleState) -> Void
 }
 
 

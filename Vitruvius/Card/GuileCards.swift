@@ -16,19 +16,19 @@ class CardMistForm: ICard {
     var requiresSingleTarget: Bool = false
     var cost: Int = 1
     
-    func resolve(source: Actor, handler: EventHandler, target: Actor?) {
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
         
         // Push the discard effect
-        handler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
         
         // Add the mist form effect
-        handler.effectList.append(
+        battleState.eventHandler.effectList.append(
             MistFormEffect(owner: source)
         )
     }
     
-    func onDrawn(source: Actor, handler: EventHandler) {}
-    func onDiscarded(source: Actor, handler: EventHandler) {}
+    func onDrawn(source: Actor, battleState: BattleState) {}
+    func onDiscarded(source: Actor, battleState: BattleState) {}
     
     class MistFormEffect: IEffect {
         
@@ -53,35 +53,33 @@ class CardMistForm: ICard {
         }
         
     }
-    
-    
 }
 
-//class CardMistForm: Card {
-//    override func performAffect(state: BattleState, descision: IDescisionMaker) -> Promise<Void> {
-//        state.playerState.body = EffectMistForm(body: state.playerState.body)
-//        return Promise<Void>()
-//    }
-//    static func newInstance() -> Card {
-//        return CardMistForm(
-//            uuid: UUID(),
-//            name: "Mist Form",
-//            cost: Cost.free(),
-//            text: "Avoid the next time you would take damage."
-//        )
-//    }
-//}
-//
-//class EffectMistForm: BodyProxy {
-//    override var description: String {
-//        return "[MIST] \(super.description)"
-//    }
-//    override func loseHp(damage: Int) -> (Int, IBody) {
-//        if (damage > 0) {
-//            print("Mist prevented \(damage) damage")
-//            return (0, self.body)
-//        } else {
-//            return (0, self)
-//        }
-//    }
-//}
+class CardPierce: ICard {
+    
+    var uuid: UUID = UUID()
+    var name: String = "Pierce"
+    var requiresSingleTarget: Bool = true
+    var cost: Int = 2
+    
+    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
+        
+        // Push the discard effect
+        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
+        
+        // Attack straight through ignore armour
+        battleState.eventHandler.push(
+            event: Event.willLoseHp(
+                UpdateBodyEvent.init(
+                    player:
+                    source,
+                    sourceUuid: self.uuid,
+                    amount: 18
+                )
+            )
+        )
+    }
+    
+    func onDrawn(source: Actor, battleState: BattleState) {}
+    func onDiscarded(source: Actor, battleState: BattleState) {}
+}

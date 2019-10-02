@@ -34,18 +34,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             body: Body(block: 0, hp: 10, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(cards: [
-                    EventStrikeCard(),
-                    EventDefendCard(),
-                    EventStrikeCard(),
-                    EventDefendCard(),
-                    EventStrikeCard(),
+                    CardStrike(),
+                    CardDefend(),
+                    CardStrike(),
+                    CardDefend(),
+                    CardStrike(),
                 ]),
                 drawPile: DrawPile(cards: [
-                    EventDefendCard(),
-                    EventStrikeCard(),
-                    EventDefendCard(),
-                    EventStrikeCard(),
-                    EventDefendCard(),
+                    CardDefend(),
+                    CardStrike(),
+                    CardDefend(),
+                    CardStrike(),
+                    CardDefend(),
                 ]),
                 discard: DiscardPile()
             )
@@ -62,6 +62,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
         )
         
+        let battleState = BattleState(
+            player: dummy,
+            allies: [],
+            enemies: [enemy],
+            eventHandler: handler
+        )
+        
         print("=== STARTING SIMULATION ===")
         
         var nextCard = dummy.cardZones.hand.cards.first
@@ -69,45 +76,45 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             handler.push(event: Event.playCard(
                 CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
             ))
-            handler.flushEvents()
+            handler.flushEvents(battleState: battleState)
             nextCard = dummy.cardZones.hand.cards.first
         }
         
         handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         nextCard = dummy.cardZones.hand.cards.first
         while nextCard != nil {
             handler.push(event: Event.playCard(
                 CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
             ))
-            handler.flushEvents()
+            handler.flushEvents(battleState: battleState)
             nextCard = dummy.cardZones.hand.cards.first
         }
         
         handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         nextCard = dummy.cardZones.hand.cards.first
         while nextCard != nil {
             handler.push(event: Event.playCard(
                 CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
             ))
-            handler.flushEvents()
+            handler.flushEvents(battleState: battleState)
             nextCard = dummy.cardZones.hand.cards.first
         }
         
         handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         handler.push(event: Event.onTurnBegan(PlayerEvent(actor: dummy)))
-        handler.flushEvents()
+        handler.flushEvents(battleState: battleState)
         
         print("=== SIMULATION ENDED ===")
         
