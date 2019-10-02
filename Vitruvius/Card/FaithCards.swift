@@ -68,13 +68,13 @@ class CardDrain: ICard {
             self.sourceUuid = sourceUuid
         }
         
-        func handle(event: Event, handler: EventHandler) -> Bool {
+        func handle(event: Event, state: BattleState) -> Bool {
             
             switch event {
             
             case .didLoseHp(let bodyEvent):
                 if (bodyEvent.sourceUuid == self.sourceUuid) {
-                    handler.push(
+                    state.eventHandler.push(
                         event: Event.willGainHp(
                             UpdateBodyEvent(
                                 player: owner,

@@ -32,16 +32,21 @@ class Enemy: Actor {
     }
 
     func planTurn(state: BattleState) -> Void {
-        state.eventHandler.effectList.append(
+        
+        // Can't modify the effects list stack here, so we need to
+        // enqueue a plan event...
+        // This is fine because we can listen for that event anyway...
+        
+        state.eventHandler.push(event: Event.onEnemyPlannedTurn(
             EnemyTurnEffect(
                 uuid: UUID(),
                 enemy: self,
                 name: "\(self.name)'s turn",
                 events: [
-                    Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player))
+                    Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
                 ]
             )
-        )
+        ))
     }
 }
 
@@ -59,13 +64,18 @@ class EnemyTurnEffect: IEffect {
         self.events = events
     }
     
-    func handle(event: Event, handler: EventHandler) -> Bool {
+    func handle(event: Event, state: BattleState) -> Bool {
         switch event {
-        case .onTurnEnded(_):
-            for event in events {
-                handler.push(event: event)
+        case .onTurnEnded(let e):
+            guard e.actor.faction == .player else {
+                return false
             }
-//            enemy.planTurn(state: state)
+            enemy.planTurn(state: state)
+            state.eventHandler.push(event: Event.onTurnEnded(PlayerEvent(actor: enemy)))
+            for event in events {
+                state.eventHandler.push(event: event)
+            }
+            state.eventHandler.push(event: Event.onTurnBegan(PlayerEvent(actor: enemy)))
             return true
             
         default:

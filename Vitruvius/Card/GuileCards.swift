@@ -40,7 +40,7 @@ class CardMistForm: ICard {
             self.owner = owner
         }
         
-        func handle(event: Event, handler: EventHandler) -> Bool {
+        func handle(event: Event, state: BattleState) -> Bool {
             switch event {
                 
             case .attack(let attackEvent):

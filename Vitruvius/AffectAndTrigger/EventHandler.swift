@@ -16,12 +16,12 @@ import Foundation
 protocol IEffect {
     var uuid: UUID { get }
     var name: String { get }
-    func handle(event: Event, handler: EventHandler) -> Bool
+    func handle(event: Event, state: BattleState) -> Bool
 }
 
 enum Event {
     
-    case awaitPlayerTriggeredEvent
+    case onEnemyPlannedTurn(EnemyTurnEffect)
     
     case onTurnBegan(PlayerEvent)
     case onTurnEnded(PlayerEvent)
@@ -165,13 +165,14 @@ class EventHandler {
         
         // Loop through the effect list
         self.effectList.removeAll { (effect) -> Bool in
-            effect.handle(event: event, handler: self)
+            effect.handle(event: event, state: battleState)
         }
     
         switch event {
             
-        case .awaitPlayerTriggeredEvent:
-            break
+        case .onEnemyPlannedTurn(let effect):
+            print("\n\(effect.enemy.name) planned their turn")
+            self.effectList.append(effect)
         
         case .onTurnBegan(let event):
             
@@ -347,80 +348,3 @@ class EventHandler {
 
 
 
-class EventDoubleDamageCard: ICard {
-    
-    let uuid: UUID = UUID()
-    let name = "Double Damage"
-    let requiresSingleTarget: Bool = false
-    var cost: Int = 1
-    
-    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
-        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        battleState.eventHandler.effectList.append(DoubleDamageTrigger(source: source))
-    }
-    
-    func onDrawn(source: Actor, battleState: BattleState) {}
-    func onDiscarded(source: Actor, battleState: BattleState) {}
-    
-    class DoubleDamageTrigger: IEffect {
-        
-        let uuid: UUID = UUID()
-        let name = "Double Damage"
-        let source: Actor
-        
-        init(source: Actor) {
-            self.source = source
-        }
-        
-        func handle(event: Event, handler: EventHandler) -> Bool {
-            switch event {
-                
-            case .attack(let event):
-                event.amount = 2 * event.amount
-                return true
-                
-            default:
-                return false
-            }
-        }
-    }
-    
-}
-
-class EventSandwichCard: ICard {
-
-    let uuid: UUID = UUID()
-    let name = "Sandwich"
-    let requiresSingleTarget: Bool = false
-    var cost: Int = 1
-    
-    func resolve(source: Actor, battleState: BattleState, target: Actor?) {
-        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        battleState.eventHandler.effectList.append(SandwichTrigger(source: source))
-    }
-    
-    func onDrawn(source: Actor, battleState: BattleState) {}
-    func onDiscarded(source: Actor, battleState: BattleState) {}
-    
-    class SandwichTrigger: IEffect {
-        
-        let uuid: UUID = UUID()
-        let name = "+2 Damage"
-        let source: Actor
-        
-        init(source: Actor) {
-            self.source = source
-        }
-        
-        func handle(event: Event, handler: EventHandler) -> Bool {
-            switch event {
-            case .attack(let event):
-                if event.sourceOwner.uuid == self.source.uuid {
-                    event.amount += 2
-                }
-            default: break
-            }
-            return false
-        }
-    }
-}

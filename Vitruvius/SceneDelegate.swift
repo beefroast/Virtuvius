@@ -91,6 +91,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         enemy.planTurn(state: battleState)
         koopa.planTurn(state: battleState)
         
+        handler.flushEvents(battleState: battleState)
+        
         var nextCard = dummy.cardZones.hand.cards.first
         while nextCard != nil {
             handler.push(event: Event.playCard(
