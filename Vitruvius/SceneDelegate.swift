@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         
-        let handler = EventHandler(eventStack: Stack<Event>(), effectList: [])
+        let handler = EventHandler(eventStack: StackQueue<Event>(), effectList: [])
         
         let dummy = Actor(
             uuid: UUID(),
@@ -96,9 +96,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
             while nextCard != nil {
                 handler.push(event: Event.playCard(
-                    CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: enemy)
+                    CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: target)
                 ))
                 handler.flushEvents(battleState: battleState)
+                                
                 target = battleState.enemies.first
                 nextCard = dummy.cardZones.hand.cards.first
             }

@@ -21,6 +21,8 @@ protocol IEffect {
 
 enum Event {
     
+    case playerInputRequired
+    
     case onBattleBegan
     
     case onEnemyPlannedTurn(EnemyTurnEffect)
@@ -141,33 +143,44 @@ class UpdateBodyEvent {
 class EventHandler {
     
     let handlerUuid: UUID = UUID()
-    var eventStack: Stack<Event>
+    var eventStack: StackQueue<Event>
     var effectList: [IEffect]
     
-    init(eventStack: Stack<Event>, effectList: [IEffect]) {
+    init(eventStack: StackQueue<Event>, effectList: [IEffect]) {
         self.eventStack = eventStack
         self.effectList = effectList
+    }
+    
+    func push(events: [Event]) -> Void {
+        for e in events.reversed() { eventStack.push(elt: e) }
+    }
+    
+    func enqueue(events: [Event]) -> Void {
+        for e in events { eventStack.enqueue(elt: e) }
     }
     
     func push(event: Event) -> Void {
         eventStack.push(elt: event)
     }
     
+    
+    
     func flushEvents(battleState: BattleState) -> Void {
-        var hasEvents = !self.eventStack.isEmpty
-        while hasEvents {
-            _ = self.popAndHandle(battleState: battleState)
-            hasEvents = !self.eventStack.isEmpty
+        
+        var playerInputRequired = self.popAndHandle(battleState: battleState)
+        
+        while playerInputRequired == false {
+            playerInputRequired = self.popAndHandle(battleState: battleState)
         }
     }
     
     func popAndHandle(battleState: BattleState) -> Bool {
         guard let e = eventStack.pop() else { return false }
-        self.handle(event: e, battleState: battleState)
-        return !self.eventStack.isEmpty
+        let playerInputRequired = self.handle(event: e, battleState: battleState)
+        return playerInputRequired
     }
     
-    func handle(event: Event, battleState: BattleState) -> Void {
+    func handle(event: Event, battleState: BattleState) -> Bool {
         
         // Loop through the effect list
         self.effectList.removeAll { (effect) -> Bool in
@@ -176,14 +189,23 @@ class EventHandler {
     
         switch event {
             
+        case .playerInputRequired:
+            return true
+            
         case .onBattleBegan:
             print("\nBattle began")
             
-            self.push(event: Event.onTurnBegan(PlayerEvent.init(actor: battleState.player)))
-            for enemy in battleState.enemies {
-                enemy.planTurn(state: battleState)
-            }
-            self.push(event: Event.willDrawCards(DrawCardsEvent.init(actor: battleState.player, amount: 5)))
+            // The player draws their hand
+            self.eventStack.enqueue(elt: Event.willDrawCards(DrawCardsEvent.init(actor: battleState.player, amount: 5)))
+            
+            // The enemy plans their turns
+            let enemyPlansEvents = battleState.enemies.map({ $0.planTurn(state: battleState) })
+            self.enqueue(events: enemyPlansEvents)
+            
+            // Enqueue the turn order
+            let enemyTurnsStart = battleState.enemies.map({ Event.onTurnBegan(PlayerEvent.init(actor: $0)) })
+            self.enqueue(events: [Event.onTurnBegan(PlayerEvent.init(actor: battleState.player))] + enemyTurnsStart)
+            
             
         case .onEnemyPlannedTurn(let effect):
             print("\n\(effect.enemy.name) planned their turn")
@@ -195,6 +217,10 @@ class EventHandler {
             
             // Lose all your block
             // TODO: We might want to lose less block here
+            
+            if event.actor.faction == .player {
+                self.push(event: Event.playerInputRequired)
+            }
             
             self.push(
                 event: Event.willLoseBlock(
@@ -209,8 +235,9 @@ class EventHandler {
             // Discard hand then draw 5 cards
             // TODO: Make this a variable amount
             
-            self.push(event: Event.willDrawCards(DrawCardsEvent(actor: event.actor, amount: 5)))
-            self.push(event: Event.discardHand(PlayerEvent(actor: event.actor)))
+            self.eventStack.push(elt: Event.willDrawCards(DrawCardsEvent(actor: event.actor, amount: 5)))
+            self.eventStack.push(elt: Event.discardHand(PlayerEvent(actor: event.actor)))
+            self.eventStack.enqueue(elt: Event.onTurnBegan(PlayerEvent(actor: event.actor)))
         
         case .drawCard(let event):
             
@@ -219,18 +246,18 @@ class EventHandler {
             guard event.actor.cardZones.drawPile.hasDraw() else {
                 guard event.actor.cardZones.discard.isEmpty == false else {
                     // Cannot draw a card or reshuffle so do nothing instead
-                    return
+                    return false
                 }
                 
                 // Reshuffle and then draw again
                 self.push(event: Event.drawCard(event))
                 self.push(event: Event.shuffleDiscardIntoDrawPile(event))
-                return
+                return false
             }
             
             // Draw a card
             guard let card = event.actor.cardZones.drawPile.drawRandom() else {
-                return
+                return false
             }
             
             event.actor.cardZones.hand.cards.append(card)
@@ -261,7 +288,7 @@ class EventHandler {
             print("\(drawCardsEvent.actor.name) will draw \(drawCardsEvent.amount) cards.")
             
             // Enqueue a draw for each in amount
-            guard drawCardsEvent.amount > 0 else { return }
+            guard drawCardsEvent.amount > 0 else { return false }
             for _ in 0...drawCardsEvent.amount-1 {
                 self.push(event: Event.drawCard(PlayerEvent(actor: drawCardsEvent.actor)))
             }
@@ -284,7 +311,7 @@ class EventHandler {
             let remainingHp = max(bodyEvent.player.body.hp - bodyEvent.amount, 0)
             let lostHp = bodyEvent.player.body.hp - remainingHp
             guard lostHp > 0 else {
-                return
+                return false
             }
             bodyEvent.player.body.hp -= lostHp
             self.push(event: Event.didLoseHp(bodyEvent))
@@ -293,7 +320,7 @@ class EventHandler {
             let remainingBlock = max(bodyEvent.player.body.block - bodyEvent.amount, 0)
             let lostBlock = bodyEvent.player.body.block - remainingBlock
             guard lostBlock > 0 else {
-                return
+                return false
             }
             bodyEvent.player.body.block -= lostBlock
             self.push(event: Event.didLoseBlock(bodyEvent))
@@ -333,6 +360,9 @@ class EventHandler {
             
         case .playCard(let cardEvent):
             print("\n\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
+            if cardEvent.cardOwner.faction == .player {
+                self.push(event: Event.playerInputRequired)
+            }
             cardEvent.card.resolve(source: cardEvent.cardOwner, battleState: battleState, target: cardEvent.target)
             
         case .attack(let attackEvent):
@@ -367,7 +397,20 @@ class EventHandler {
             print("\n\(enemy.name) was defeated.")
             
             // Remove the enemy from the list of enemies
-            battleState.enemies.removeAll { (e) -> Bool in e.uuid == enemy.uuid }
+            battleState.enemies.removeAll { (e) -> Bool in
+                e.uuid == enemy.uuid
+            }
+            
+            
+            // Remove the queued start of turn from the queue...
+            self.eventStack.removeWhere { (e) -> Bool in
+                switch e {
+                case .onTurnBegan(let e): return e.actor.uuid == enemy.uuid
+                default: return false
+                }
+            }
+            
+            print("\(battleState.enemies.count) enemies remain.")
             
             // If there's no enemies, post a win event
             if battleState.enemies.count == 0 {
@@ -382,6 +425,7 @@ class EventHandler {
             
         }
         
+        return false
         
     }
 }

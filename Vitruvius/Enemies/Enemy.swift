@@ -31,13 +31,13 @@ class Enemy: Actor {
 
     }
 
-    func planTurn(state: BattleState) -> Void {
+    func planTurn(state: BattleState) -> Event {
         
         // Can't modify the effects list stack here, so we need to
         // enqueue a plan event...
         // This is fine because we can listen for that event anyway...
         
-        state.eventHandler.push(event: Event.onEnemyPlannedTurn(
+        return Event.onEnemyPlannedTurn(
             EnemyTurnEffect(
                 uuid: UUID(),
                 enemy: self,
@@ -46,7 +46,7 @@ class Enemy: Actor {
                     Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
                 ]
             )
-        ))
+        )
     }
 }
 
@@ -66,16 +66,33 @@ class EnemyTurnEffect: IEffect {
     
     func handle(event: Event, state: BattleState) -> Bool {
         switch event {
-        case .onTurnEnded(let e):
-            guard e.actor.faction == .player else {
+            
+        case .onEnemyDefeated(let e):
+            
+            // Remove this event if the enemy is defeated...
+            return e.uuid == self.enemy.uuid
+            
+        case .onTurnBegan(let e):
+            
+            // When our turn begins...
+            guard e.actor.uuid == self.enemy.uuid else {
                 return false
             }
-            enemy.planTurn(state: state)
-            state.eventHandler.push(event: Event.onTurnEnded(PlayerEvent(actor: enemy)))
-            for event in events {
-                state.eventHandler.push(event: event)
-            }
-            state.eventHandler.push(event: Event.onTurnBegan(PlayerEvent(actor: enemy)))
+            
+            state.eventHandler.push(events:
+                
+                // Do our planned turn
+                events + [
+                    
+                // Plan our next turn
+                enemy.planTurn(state: state),
+                
+                //End our turn
+                Event.onTurnEnded(PlayerEvent.init(actor: enemy))
+            
+            ])
+            
+            // Remove this listener
             return true
             
         default:
