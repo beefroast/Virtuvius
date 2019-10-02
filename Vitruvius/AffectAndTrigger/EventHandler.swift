@@ -20,14 +20,18 @@ protocol IEffect {
 }
 
 enum Event {
+    
+    case awaitPlayerTriggeredEvent
+    
     case onTurnBegan(PlayerEvent)
     case onTurnEnded(PlayerEvent)
     
     case willDrawCards(DrawCardsEvent)
     case drawCard(PlayerEvent)
+    case onCardDrawn(CardDrawnEvent)
     case discardCard(DiscardCardEvent)
     case discardHand(PlayerEvent)
-    case onCardDrawn(CardDrawnEvent)
+    case destroyCard(DiscardCardEvent)
     case shuffleDiscardIntoDrawPile(PlayerEvent)
         
     case willLoseHp(UpdateBodyEvent)
@@ -165,6 +169,9 @@ class EventHandler {
         }
     
         switch event {
+            
+        case .awaitPlayerTriggeredEvent:
+            break
         
         case .onTurnBegan(let event):
             
@@ -222,6 +229,9 @@ class EventHandler {
             
             print("\(event.actor.name) discarded \(event.card.name).")
         
+        case .destroyCard(let event):
+            break
+            
         case .discardHand(let event):
             
             print("\(event.actor.name) discards their hand.")

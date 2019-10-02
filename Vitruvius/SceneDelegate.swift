@@ -52,38 +52,44 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
         )
         
-        let enemy = Actor(
+        let enemy = Enemy(
             uuid: UUID(),
-            name: "Enemy",
+            name: "Goomba",
             faction: .enemies,
             body: Body(block: 3, hp: 20, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
                 discard: DiscardPile()
-            )
+            ),
+            preBattleCards: []
         )
         
-        let enemyB = Actor(
+        
+        let koopa = Enemy(
             uuid: UUID(),
-            name: "Enemy",
+            name: "Koopa",
             faction: .enemies,
             body: Body(block: 3, hp: 20, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
                 discard: DiscardPile()
-            )
+            ),
+            preBattleCards: []
         )
         
         let battleState = BattleState(
             player: dummy,
             allies: [],
-            enemies: [enemy, enemyB],
+            enemies: [enemy, koopa],
             eventHandler: handler
         )
         
         print("=== STARTING SIMULATION ===")
+        
+        enemy.planTurn(state: battleState)
+        koopa.planTurn(state: battleState)
         
         var nextCard = dummy.cardZones.hand.cards.first
         while nextCard != nil {

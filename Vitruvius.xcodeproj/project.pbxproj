@@ -26,7 +26,7 @@
 		6434F2BF2343288B0040C892 /* ICard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2BE2343288B0040C892 /* ICard.swift */; };
 		6434F2C12343485F0040C892 /* NeutralCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2C02343485F0040C892 /* NeutralCards.swift */; };
 		6434F2C3234350FC0040C892 /* SharpCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2C2234350FC0040C892 /* SharpCards.swift */; };
-		6472428F233F0F3D006BB6A3 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6472428E233F0F3D006BB6A3 /* Enemy.swift */; };
+		6434F2C62344992C0040C892 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6434F2C52344992C0040C892 /* Enemy.swift */; };
 		64724293233F870F006BB6A3 /* CharmCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724292233F870F006BB6A3 /* CharmCards.swift */; };
 		64724295234056D8006BB6A3 /* FaithCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724294234056D8006BB6A3 /* FaithCards.swift */; };
 		64724299234064B6006BB6A3 /* MightCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64724298234064B6006BB6A3 /* MightCards.swift */; };
@@ -82,7 +82,7 @@
 		6434F2BE2343288B0040C892 /* ICard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICard.swift; sourceTree = "<group>"; };
 		6434F2C02343485F0040C892 /* NeutralCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeutralCards.swift; sourceTree = "<group>"; };
 		6434F2C2234350FC0040C892 /* SharpCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharpCards.swift; sourceTree = "<group>"; };
-		6472428E233F0F3D006BB6A3 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		6434F2C52344992C0040C892 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		64724292233F870F006BB6A3 /* CharmCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharmCards.swift; sourceTree = "<group>"; };
 		64724294234056D8006BB6A3 /* FaithCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaithCards.swift; sourceTree = "<group>"; };
 		64724298234064B6006BB6A3 /* MightCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MightCards.swift; sourceTree = "<group>"; };
@@ -158,6 +158,7 @@
 		64092287233E0B45005C2EB7 /* Vitruvius */ = {
 			isa = PBXGroup;
 			children = (
+				6434F2C4234499120040C892 /* Enemies */,
 				6434F2BD2343287B0040C892 /* Card */,
 				64C7600E234079EB00AE61DB /* AffectAndTrigger */,
 				64092288233E0B45005C2EB7 /* AppDelegate.swift */,
@@ -168,7 +169,6 @@
 				64092296233E0B48005C2EB7 /* Info.plist */,
 				64092290233E0B48005C2EB7 /* Preview Content */,
 				640922B8233E0B74005C2EB7 /* Card.swift */,
-				6472428E233F0F3D006BB6A3 /* Enemy.swift */,
 				640922BA233E10CA005C2EB7 /* Stack.swift */,
 				640922BC233F0501005C2EB7 /* PlayerState.swift */,
 				64C2B4AB233F07440051041C /* BattleState.swift */,
@@ -225,6 +225,14 @@
 				6434F2C2234350FC0040C892 /* SharpCards.swift */,
 			);
 			path = Card;
+			sourceTree = "<group>";
+		};
+		6434F2C4234499120040C892 /* Enemies */ = {
+			isa = PBXGroup;
+			children = (
+				6434F2C52344992C0040C892 /* Enemy.swift */,
+			);
+			path = Enemies;
 			sourceTree = "<group>";
 		};
 		64C7600E234079EB00AE61DB /* AffectAndTrigger */ = {
@@ -488,8 +496,8 @@
 				6434F2C12343485F0040C892 /* NeutralCards.swift in Sources */,
 				64C76010234079FF00AE61DB /* EventHandler.swift in Sources */,
 				6434F2C3234350FC0040C892 /* SharpCards.swift in Sources */,
-				6472428F233F0F3D006BB6A3 /* Enemy.swift in Sources */,
 				6409228D233E0B45005C2EB7 /* ContentView.swift in Sources */,
+				6434F2C62344992C0040C892 /* Enemy.swift in Sources */,
 				640922BD233F0501005C2EB7 /* PlayerState.swift in Sources */,
 				640922B9233E0B74005C2EB7 /* Card.swift in Sources */,
 				6434F2BB2343282F0040C892 /* Actor.swift in Sources */,
