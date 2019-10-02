@@ -21,10 +21,10 @@ class BattleState {
     
     var player: Actor
     var allies: [Actor]
-    var enemies: [Actor]
+    var enemies: [Enemy]
     var eventHandler: EventHandler
     
-    init(player: Actor, allies: [Actor], enemies: [Actor], eventHandler: EventHandler) {
+    init(player: Actor, allies: [Actor], enemies: [Enemy], eventHandler: EventHandler) {
         self.player = player
         self.allies = allies
         self.enemies = enemies

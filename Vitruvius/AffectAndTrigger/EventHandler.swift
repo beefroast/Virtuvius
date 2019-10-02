@@ -21,6 +21,8 @@ protocol IEffect {
 
 enum Event {
     
+    case onBattleBegan
+    
     case onEnemyPlannedTurn(EnemyTurnEffect)
     
     case onTurnBegan(PlayerEvent)
@@ -46,6 +48,11 @@ enum Event {
     
     case playCard(CardEvent)
     case attack(AttackEvent)
+    
+    case onEnemyDefeated(Enemy)
+    
+    case onBattleWon
+    case onBattleLost
 }
 
 class DiscardCardEvent {
@@ -56,7 +63,6 @@ class DiscardCardEvent {
         self.card = card
     }
 }
-
 
 
 class PlayerEvent {
@@ -169,6 +175,15 @@ class EventHandler {
         }
     
         switch event {
+            
+        case .onBattleBegan:
+            print("\nBattle began")
+            
+            self.push(event: Event.onTurnBegan(PlayerEvent.init(actor: battleState.player)))
+            for enemy in battleState.enemies {
+                enemy.planTurn(state: battleState)
+            }
+            self.push(event: Event.willDrawCards(DrawCardsEvent.init(actor: battleState.player, amount: 5)))
             
         case .onEnemyPlannedTurn(let effect):
             print("\n\(effect.enemy.name) planned their turn")
@@ -287,6 +302,11 @@ class EventHandler {
             print("\(bodyEvent.player.name) lost \(bodyEvent.amount) hp")
             print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
+            // TODO: This is a little dodgey
+            if bodyEvent.player.body.hp == 0 && bodyEvent.player.faction == .enemies {
+                self.push(event: Event.onEnemyDefeated(bodyEvent.player as! Enemy))
+            }
+            
         case .didLoseBlock(let bodyEvent):
             print("\(bodyEvent.player.name) lost \(bodyEvent.amount) block")
             print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
@@ -341,7 +361,28 @@ class EventHandler {
                     )
                 )
             }
+            
+        case .onEnemyDefeated(let enemy):
+            
+            print("\n\(enemy.name) was defeated.")
+            
+            // Remove the enemy from the list of enemies
+            battleState.enemies.removeAll { (e) -> Bool in e.uuid == enemy.uuid }
+            
+            // If there's no enemies, post a win event
+            if battleState.enemies.count == 0 {
+                self.push(event: Event.onBattleWon)
+            }
+        
+        case .onBattleWon:
+            print("\nBattle was won!")
+            
+        case .onBattleLost:
+            print("\nPlayer defeated!")
+            
         }
+        
+        
     }
 }
 
