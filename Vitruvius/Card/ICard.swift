@@ -9,6 +9,17 @@
 import Foundation
 
 
+enum CardAttributes {
+    case attack
+    case spell
+    case melee
+    case ranged
+    case buff
+    case debuff
+    case defence
+    case heal
+    case summons
+}
 
 
 protocol ICard {
