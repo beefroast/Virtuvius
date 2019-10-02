@@ -103,22 +103,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "20A7362D-0BC6-407E-90CE-2C1BE06CB07F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Vitruvius/AffectAndTrigger/EventHandler.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
-            landmarkName = "handle(event:battleState:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "17DB40FF-75E2-4812-8966-50F261F233EF"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -174,8 +158,8 @@
             filePath = "Vitruvius/Enemies/Enemy.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
             landmarkName = "handle(event:state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -190,8 +174,8 @@
             filePath = "Vitruvius/Enemies/Enemy.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "handle(event:state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +190,8 @@
             filePath = "Vitruvius/Enemies/Enemy.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "handle(event:state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -222,8 +206,8 @@
             filePath = "Vitruvius/AffectAndTrigger/EventHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "421"
-            endingLineNumber = "421"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
             landmarkName = "handle(event:battleState:)"
             landmarkType = "7">
          </BreakpointContent>

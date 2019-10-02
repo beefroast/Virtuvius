@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             uuid: UUID(),
             name: "Player",
             faction: .player,
-            body: Body(block: 0, hp: 10, maxHp: 20),
+            body: Body(block: 0, hp: 70, maxHp: 70),
             cardZones: CardZones(
                 hand: Hand(cards: []),
                 drawPile: DrawPile(cards: [
@@ -55,7 +55,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             uuid: UUID(),
             name: "Goomba",
             faction: .enemies,
-            body: Body(block: 3, hp: 20, maxHp: 20),
+            body: Body(block: 0, hp: 40, maxHp: 40),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
@@ -69,7 +69,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             uuid: UUID(),
             name: "Koopa",
             faction: .enemies,
-            body: Body(block: 3, hp: 20, maxHp: 20),
+            body: Body(block: 0, hp: 40, maxHp: 40),
+            cardZones: CardZones(
+                hand: Hand(),
+                drawPile: DrawPile(cards: []),
+                discard: DiscardPile()
+            ),
+            preBattleCards: []
+        )
+        
+        let bowser = Enemy(
+            uuid: UUID(),
+            name: "Bowser",
+            faction: .enemies,
+            body: Body(block: 0, hp: 40, maxHp: 40),
             cardZones: CardZones(
                 hand: Hand(),
                 drawPile: DrawPile(cards: []),
@@ -81,7 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let battleState = BattleState(
             player: dummy,
             allies: [],
-            enemies: [enemy, koopa],
+            enemies: [enemy, koopa, bowser],
             eventHandler: handler
         )
                 
@@ -94,7 +107,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             var nextCard = dummy.cardZones.hand.cards.first
         
-            while nextCard != nil && target != nil {
+            while nextCard != nil && target != nil && dummy.body.hp > 0 {
                 handler.push(event: Event.playCard(
                     CardEvent.init(cardOwner: dummy, card: dummy.cardZones.hand.cards.first!, target: target)
                 ))
@@ -104,7 +117,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 nextCard = dummy.cardZones.hand.cards.first
             }
             
-            if target != nil {
+            if target != nil && dummy.body.hp > 0 {
                 handler.push(event: Event.onTurnEnded(PlayerEvent(actor: dummy)))
                 handler.flushEvents(battleState: battleState)
             }

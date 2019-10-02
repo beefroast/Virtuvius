@@ -330,8 +330,12 @@ class EventHandler {
             print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
             // TODO: This is a little dodgey
-            if bodyEvent.player.body.hp == 0 && bodyEvent.player.faction == .enemies {
-                self.push(event: Event.onEnemyDefeated(bodyEvent.player as! Enemy))
+            if bodyEvent.player.body.hp == 0 {
+                if bodyEvent.player.faction == .enemies {
+                    self.push(event: Event.onEnemyDefeated(bodyEvent.player as! Enemy))
+                } else if bodyEvent.player.faction == .player {
+                    self.push(event: Event.onBattleLost)
+                }
             }
             
         case .didLoseBlock(let bodyEvent):

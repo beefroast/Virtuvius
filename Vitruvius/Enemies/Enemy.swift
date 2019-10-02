@@ -44,6 +44,7 @@ class Enemy: Actor {
                 name: "\(self.name)'s turn",
                 events: [
                     Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
+                    Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
                 ]
             )
         )
