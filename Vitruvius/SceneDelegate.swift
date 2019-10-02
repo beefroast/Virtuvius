@@ -31,12 +31,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let dummy = Actor(
             uuid: UUID(),
             name: "Player",
+            faction: .player,
             body: Body(block: 0, hp: 10, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(cards: [
                     CardStrike(),
                     CardDefend(),
-                    CardStrike(),
+                    CardFireball(),
                     CardDefend(),
                     CardStrike(),
                 ]),
@@ -54,6 +55,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let enemy = Actor(
             uuid: UUID(),
             name: "Enemy",
+            faction: .enemies,
+            body: Body(block: 3, hp: 20, maxHp: 20),
+            cardZones: CardZones(
+                hand: Hand(),
+                drawPile: DrawPile(cards: []),
+                discard: DiscardPile()
+            )
+        )
+        
+        let enemyB = Actor(
+            uuid: UUID(),
+            name: "Enemy",
+            faction: .enemies,
             body: Body(block: 3, hp: 20, maxHp: 20),
             cardZones: CardZones(
                 hand: Hand(),
@@ -65,7 +79,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let battleState = BattleState(
             player: dummy,
             allies: [],
-            enemies: [enemy],
+            enemies: [enemy, enemyB],
             eventHandler: handler
         )
         

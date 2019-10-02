@@ -13,12 +13,14 @@ class Actor: IDamagable, ICardPlayer {
     
     let uuid: UUID
     let name: String
+    let faction: Faction
     var body: Body
     var cardZones: CardZones
     
-    init(uuid: UUID, name: String, body: Body, cardZones: CardZones) {
+    init(uuid: UUID, name: String, faction: Faction, body: Body, cardZones: CardZones) {
         self.uuid = uuid
         self.name = name
+        self.faction = faction
         self.body = body
         self.cardZones = cardZones
     }

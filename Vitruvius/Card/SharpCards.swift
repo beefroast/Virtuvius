@@ -25,7 +25,7 @@ class CardRecall : ICard {
     func onDiscarded(source: Actor, battleState: BattleState) {}
 }
 
-class CardFirebase: ICard {
+class CardFireball: ICard {
     
     var uuid: UUID = UUID()
     var name: String = "Fireball"
@@ -36,7 +36,10 @@ class CardFirebase: ICard {
     
     func resolve(source: Actor, battleState: BattleState, target: Actor?) {
         battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        battleState.eventHandler.push(event: Event.willDrawCards(DrawCardsEvent.init(actor: source, amount: 3)))
+        let targets = battleState.getAllOpponentActors(faction: source.faction)
+        battleState.eventHandler.push(
+            event: Event.attack(AttackEvent.init(sourceUuid: self.uuid, sourceOwner: source, targets: targets, amount: 8))
+        )
     }
     
     func onDrawn(source: Actor, battleState: BattleState) {}
