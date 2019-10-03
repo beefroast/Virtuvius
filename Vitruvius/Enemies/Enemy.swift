@@ -101,3 +101,64 @@ class EnemyTurnEffect: IEffect {
         }
     }
 }
+
+
+//class Lagavulin: Enemy {
+//    
+//    var turnCount: Int = 0
+//    
+//    override func planTurn(state: BattleState) -> Event {
+//
+//        self.turnCount = (self.turnCount + 1) % 4
+//        
+//        if turnCount == 0 {
+//            
+//            // Debuff the enemy
+//            
+//        } else {
+//            
+//            
+//            
+//        }
+//        
+//        
+//        
+//        
+//        if isAsleep {
+//            return Event.onEnemyPlannedTurn(
+//                EnemyTurnEffect(
+//                    uuid: UUID(),
+//                    enemy: self,
+//                    name: "\(self.name)'s turn",
+//                    events: [
+//                        Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
+//                        Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
+//                    ]
+//                )
+//            )
+//        
+//        } else {
+//            
+//            
+//            
+//            
+//        }
+//        
+//        // Can't modify the effects list stack here, so we need to
+//        // enqueue a plan event...
+//        // This is fine because we can listen for that event anyway...
+//        
+//        return Event.onEnemyPlannedTurn(
+//            EnemyTurnEffect(
+//                uuid: UUID(),
+//                enemy: self,
+//                name: "\(self.name)'s turn",
+//                events: [
+//                    Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
+//                    Event.playCard(CardEvent(cardOwner: self, card: CardStrike(), target: state.player)),
+//                ]
+//            )
+//        )
+//    }
+//    
+//}

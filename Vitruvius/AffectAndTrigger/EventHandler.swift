@@ -232,11 +232,7 @@ class EventHandler {
             
             print("\n\(event.actor.name) turn ended.")
             
-            // Discard hand then draw 5 cards
-            // TODO: Make this a variable amount
-            
-            self.eventStack.push(elt: Event.willDrawCards(DrawCardsEvent(actor: event.actor, amount: 5)))
-            self.eventStack.push(elt: Event.discardHand(PlayerEvent(actor: event.actor)))
+            // Enqueue their next turn...
             self.eventStack.enqueue(elt: Event.onTurnBegan(PlayerEvent(actor: event.actor)))
         
         case .drawCard(let event):
@@ -426,6 +422,8 @@ class EventHandler {
             
         case .onBattleLost:
             print("\nPlayer defeated!")
+            // Push a player input required here
+            self.push(event: Event.playerInputRequired)
             
         }
         
@@ -434,6 +432,43 @@ class EventHandler {
     }
 }
 
+
+class DiscardThenDrawAtEndOfTurnEffect: IEffect {
+    
+    var uuid: UUID
+    let ownerUuid: UUID
+    var name: String
+    let cardsDrawn: Int
+    
+    init(uuid: UUID, ownerUuid: UUID, name: String, cardsDrawn: Int) {
+        self.uuid = uuid
+        self.ownerUuid = ownerUuid
+        self.name = name
+        self.cardsDrawn = cardsDrawn
+    }
+    
+    func handle(event: Event, state: BattleState) -> Bool {
+        
+        switch event {
+            
+        case .onTurnEnded(let event):
+            
+            guard event.actor.uuid == self.ownerUuid else {
+                return false
+            }
+            
+            state.eventHandler.push(events: [
+                Event.discardHand(PlayerEvent(actor: event.actor)),
+                Event.willDrawCards(DrawCardsEvent(actor: event.actor, amount: self.cardsDrawn))
+            ])
+            
+        default:
+            break
+        }
+        
+        return false
+    }
+}
 
 
 

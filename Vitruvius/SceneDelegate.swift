@@ -97,6 +97,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             enemies: [enemy, koopa, bowser],
             eventHandler: handler
         )
+        
+        // Set up the end of turn draw amount triggers
+        handler.effectList.append(
+            DiscardThenDrawAtEndOfTurnEffect(
+                uuid: UUID(),
+                ownerUuid: dummy.uuid,
+                name: "Player discard then draw.",
+                cardsDrawn: 5
+            )
+        )
                 
         handler.push(event: Event.onBattleBegan)
         handler.flushEvents(battleState: battleState)
