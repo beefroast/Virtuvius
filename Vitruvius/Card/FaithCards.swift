@@ -24,28 +24,31 @@ class CardDrain: ICard {
             return
         }
         
-        // Push the discard effect
-        battleState.eventHandler.push(event: Event.discardCard(DiscardCardEvent.init(actor: source, card: self)))
-        
-        // Push the gain off of damage effect
-        battleState.eventHandler.effectList.append(
-            DrainEffect(
+        battleState.eventHandler.push(events: [
+            
+            // Listen for damage done by this source, and gain that much life
+            Event.addEffect(DrainEffect(
                 owner: source,
-                sourceUuid: self.uuid
-            )
-        )
+                sourceUuid:
+                source.uuid
+            )),
+            
+            // Attack for 6
+            Event.attack(AttackEvent.init(
+                sourceUuid: self.uuid,
+                sourceOwner: source,
+                targets: [target],
+                amount: 6
+            )),
+            
+            // Discard this card
+            Event.discardCard(DiscardCardEvent.init(
+                actor: source,
+                card: self
+            )),
+            
+        ])
         
-        // Push the attack
-        battleState.eventHandler.push(
-            event: Event.attack(
-                AttackEvent(
-                    sourceUuid: self.uuid,
-                    sourceOwner: source,
-                    targets: [target],
-                    amount: 6
-                )
-            )
-        )
     }
     
 

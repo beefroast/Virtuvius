@@ -30,6 +30,8 @@ enum Event {
     case onTurnBegan(PlayerEvent)
     case onTurnEnded(PlayerEvent)
     
+    case addEffect(IEffect)
+    
     case willDrawCards(DrawCardsEvent)
     case drawCard(PlayerEvent)
     case onCardDrawn(CardDrawnEvent)
@@ -193,7 +195,6 @@ class EventHandler {
             return true
             
         case .onBattleBegan:
-            print("\nBattle began")
             
             // The player draws their hand
             self.eventStack.enqueue(elt: Event.willDrawCards(DrawCardsEvent.init(actor: battleState.player, amount: 5)))
@@ -208,12 +209,9 @@ class EventHandler {
             
             
         case .onEnemyPlannedTurn(let effect):
-            print("\n\(effect.enemy.name) planned their turn")
             self.effectList.append(effect)
         
         case .onTurnBegan(let event):
-            
-            print("\n\(event.actor.name) turn began.")
             
             // Lose all your block
             // TODO: We might want to lose less block here
@@ -230,14 +228,13 @@ class EventHandler {
         
         case .onTurnEnded(let event):
             
-            print("\n\(event.actor.name) turn ended.")
-            
             // Enqueue their next turn...
             self.eventStack.enqueue(elt: Event.onTurnBegan(PlayerEvent(actor: event.actor)))
+            
+        case .addEffect(let effect):
+            self.effectList.insert(effect, at: 0)
         
         case .drawCard(let event):
-            
-            print("\(event.actor.name) draws card.")
             
             guard event.actor.cardZones.drawPile.hasDraw() else {
                 guard event.actor.cardZones.discard.isEmpty == false else {
@@ -265,23 +262,17 @@ class EventHandler {
                 card.uuid == event.card.uuid
             }
             event.actor.cardZones.discard.push(elt: event.card)
-            
-            print("\(event.actor.name) discarded \(event.card.name).")
         
         case .destroyCard(let event):
             break
             
         case .discardHand(let event):
             
-            print("\(event.actor.name) discards their hand.")
-            
             for card in event.actor.cardZones.hand.cards {
                 self.push(event: Event.discardCard(DiscardCardEvent.init(actor: event.actor, card: card)))
             }
             
         case .willDrawCards(let drawCardsEvent):
-            
-            print("\(drawCardsEvent.actor.name) will draw \(drawCardsEvent.amount) cards.")
             
             // Enqueue a draw for each in amount
             guard drawCardsEvent.amount > 0 else { return false }
@@ -291,13 +282,9 @@ class EventHandler {
             
         case .onCardDrawn(let event):
             
-            print("\(event.actor.name) drew \(event.card.name).")
-            
             event.card.onDrawn(source: event.actor, battleState: battleState)
             
         case .shuffleDiscardIntoDrawPile(let event):
-            
-            print("\(event.actor.name) shuffles their discard into their draw pile.")
             
             let discardedCards = event.actor.cardZones.discard.asArray()
             event.actor.cardZones.drawPile.shuffleIn(cards: discardedCards)
@@ -322,8 +309,6 @@ class EventHandler {
             self.push(event: Event.didLoseBlock(bodyEvent))
             
         case .didLoseHp(let bodyEvent):
-            print("\(bodyEvent.player.name) lost \(bodyEvent.amount) hp")
-            print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
             
             // TODO: This is a little dodgey
             if bodyEvent.player.body.hp == 0 {
@@ -335,8 +320,7 @@ class EventHandler {
             }
             
         case .didLoseBlock(let bodyEvent):
-            print("\(bodyEvent.player.name) lost \(bodyEvent.amount) block")
-            print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
+            break
             
         case .willGainHp(let bodyEvent):
             // Gain up to your maximum HP
@@ -351,15 +335,12 @@ class EventHandler {
             self.push(event: Event.didGainBlock(bodyEvent))
             
         case .didGainHp(let bodyEvent):
-            print("\(bodyEvent.player.name) gained \(bodyEvent.amount) hp")
-            print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
+            break
             
         case .didGainBlock(let bodyEvent):
-            print("\(bodyEvent.player.name) gained \(bodyEvent.amount) block")
-            print("\(bodyEvent.player.name) has \(bodyEvent.player.body.description)")
+            break
             
         case .playCard(let cardEvent):
-            print("\n\(cardEvent.cardOwner.name) played \(cardEvent.card.name)")
             if cardEvent.cardOwner.faction == .player {
                 self.push(event: Event.playerInputRequired)
             }
@@ -368,8 +349,6 @@ class EventHandler {
         case .attack(let attackEvent):
             
             attackEvent.targets.forEach { (target) in
-                
-                print("\(attackEvent.sourceOwner.name) attacked \(String(describing: attackEvent.targets.first?.name)) for \(attackEvent.amount)")
                 
                 // Send the event to reduce the block
                 
@@ -394,8 +373,6 @@ class EventHandler {
             
         case .onEnemyDefeated(let enemy):
             
-            print("\n\(enemy.name) was defeated.")
-            
             // Remove the enemy from the list of enemies
             battleState.enemies.removeAll { (e) -> Bool in
                 e.uuid == enemy.uuid
@@ -410,18 +387,15 @@ class EventHandler {
                 }
             }
             
-            print("\(battleState.enemies.count) enemies remain.")
-            
             // If there's no enemies, post a win event
             if battleState.enemies.count == 0 {
                 self.push(event: Event.onBattleWon)
             }
         
         case .onBattleWon:
-            print("\nBattle was won!")
+            break
             
         case .onBattleLost:
-            print("\nPlayer defeated!")
             // Push a player input required here
             self.push(event: Event.playerInputRequired)
             
@@ -491,13 +465,16 @@ class EventPrinterEffect: IEffect {
             print("Battle began.")
             
         case .onEnemyPlannedTurn(let e):
-            print("\(e.enemy.name) planned their next turn.")
+            print("\n\(e.enemy.name) planned their next turn.")
             
         case .onTurnBegan(let e):
-            print("\(e.actor.name) began their turn.")
+            print("\n>>> \(e.actor.name) began their turn.")
             
         case .onTurnEnded(let e):
-            print("\(e.actor.name) ended their turn.")
+            print("\n<<< \(e.actor.name) ended their turn.")
+            
+        case .addEffect(let e):
+            print("\(e.name) added to effects list.")
             
         case .willDrawCards(let e):
             print("\(e.actor.name) will draw \(e.amount) cards.")
@@ -521,31 +498,31 @@ class EventPrinterEffect: IEffect {
             print("\(e.actor.name) shuffles their discard into their draw pile.")
             
         case .willLoseHp(let e):
-            print("\(e.player.name) will lose \(e.amount) hp.")
+            print("\(e.player.name) will lose \(e.amount) hp -> \(e.player.body.description).")
             
         case .willLoseBlock(let e):
-            print("\(e.player.name) will lose \(e.amount) block.")
+            print("\(e.player.name) will lose \(e.amount) block -> \(e.player.body.description).")
             
         case .didLoseHp(let e):
-            print("\(e.player.name) lost \(e.amount) hp.")
+            print("\(e.player.name) lost \(e.amount) hp -> \(e.player.body.description).")
             
         case .didLoseBlock(let e):
-            print("\(e.player.name) lost \(e.amount) block.")
+            print("\(e.player.name) lost \(e.amount) block -> \(e.player.body.description).")
             
         case .willGainHp(let e):
-            print("\(e.player.name) will gain \(e.amount) hp.")
+            print("\(e.player.name) will gain \(e.amount) hp -> \(e.player.body.description).")
             
         case .willGainBlock(let e):
-            print("\(e.player.name) will gain \(e.amount) block.")
+            print("\(e.player.name) will gain \(e.amount) block -> \(e.player.body.description).")
         
         case .didGainHp(let e):
-            print("\(e.player.name) gained \(e.amount) hp.")
+            print("\(e.player.name) gained \(e.amount) hp -> \(e.player.body.description).")
             
         case .didGainBlock(let e):
-            print("\(e.player.name) gained \(e.amount) block.")
+            print("\(e.player.name) gained \(e.amount) block -> \(e.player.body.description).")
             
         case .playCard(let e):
-            print("\(e.cardOwner.name) played \(e.card.name).")
+            print("\n\(e.cardOwner.name) played \(e.card.name).")
             
         case .attack(let e):
             let targetList = e.targets.map({ $0.name }).joined(separator: ", ")
@@ -555,11 +532,13 @@ class EventPrinterEffect: IEffect {
             print("\(e.name) was defeated.")
             
         case .onBattleWon:
-            print("Player won the battle.")
+            print("\nPlayer won the battle.")
             
         case .onBattleLost:
-            print("Player lost the battle.")
+            print("\nPlayer lost the battle.")
+            
         }
+
         
         return false
     }

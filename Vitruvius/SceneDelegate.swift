@@ -26,7 +26,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         
-        let handler = EventHandler(eventStack: StackQueue<Event>(), effectList: [])
+        let handler = EventHandler(
+            eventStack: StackQueue<Event>(),
+            effectList: [EventPrinterEffect.init(uuid: UUID(), name: "Event printer")]
+        )
         
         let dummy = Actor(
             uuid: UUID(),
