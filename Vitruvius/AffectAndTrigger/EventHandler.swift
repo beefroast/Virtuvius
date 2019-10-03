@@ -471,4 +471,100 @@ class DiscardThenDrawAtEndOfTurnEffect: IEffect {
 }
 
 
+class EventPrinterEffect: IEffect {
+    
+    var uuid: UUID
+    var name: String
+    
+    init(uuid: UUID, name: String) {
+        self.uuid = uuid
+        self.name = name
+    }
+    
+    func handle(event: Event, state: BattleState) -> Bool {
+        switch event {
+            
+        case .playerInputRequired:
+            break
+            
+        case .onBattleBegan:
+            print("Battle began.")
+            
+        case .onEnemyPlannedTurn(let e):
+            print("\(e.enemy.name) planned their next turn.")
+            
+        case .onTurnBegan(let e):
+            print("\(e.actor.name) began their turn.")
+            
+        case .onTurnEnded(let e):
+            print("\(e.actor.name) ended their turn.")
+            
+        case .willDrawCards(let e):
+            print("\(e.actor.name) will draw \(e.amount) cards.")
+            
+        case .drawCard(let e):
+            print("\(e.actor.name) drew a card.")
+            
+        case .onCardDrawn(let e):
+            print("\(e.actor.name) drew \(e.card.name).")
+            
+        case .discardCard(let e):
+            print("\(e.actor.name) discarded \(e.card.name)")
+            
+        case .discardHand(let e):
+            print("\(e.actor.name) discards their hand.")
+            
+        case .destroyCard(let e):
+            print("\(e.actor.name) destroys \(e.card.name)")
+            
+        case .shuffleDiscardIntoDrawPile(let e):
+            print("\(e.actor.name) shuffles their discard into their draw pile.")
+            
+        case .willLoseHp(let e):
+            print("\(e.player.name) will lose \(e.amount) hp.")
+            
+        case .willLoseBlock(let e):
+            print("\(e.player.name) will lose \(e.amount) block.")
+            
+        case .didLoseHp(let e):
+            print("\(e.player.name) lost \(e.amount) hp.")
+            
+        case .didLoseBlock(let e):
+            print("\(e.player.name) lost \(e.amount) block.")
+            
+        case .willGainHp(let e):
+            print("\(e.player.name) will gain \(e.amount) hp.")
+            
+        case .willGainBlock(let e):
+            print("\(e.player.name) will gain \(e.amount) block.")
+        
+        case .didGainHp(let e):
+            print("\(e.player.name) gained \(e.amount) hp.")
+            
+        case .didGainBlock(let e):
+            print("\(e.player.name) gained \(e.amount) block.")
+            
+        case .playCard(let e):
+            print("\(e.cardOwner.name) played \(e.card.name).")
+            
+        case .attack(let e):
+            let targetList = e.targets.map({ $0.name }).joined(separator: ", ")
+            print("\(e.sourceOwner.name) attacked \(targetList) for \(e.amount).")
+            
+        case .onEnemyDefeated(let e):
+            print("\(e.name) was defeated.")
+            
+        case .onBattleWon:
+            print("Player won the battle.")
+            
+        case .onBattleLost:
+            print("Player lost the battle.")
+        }
+        
+        return false
+    }
+    
+    
+}
+
 
